@@ -1,0 +1,30 @@
+$color-primary: var(--color-primary);
+$color-text: var(--color-text);
+$color-background: var(--color-background);
+$color-secondary: var(--color-secondary);
+$color-accent: var(--color-accent);
+$color-white: var(--color-white);
+$color-black: var(--color-black);
+
+//fonts
+$title-small: 18px;
+$title-medium: 24px;
+$title-large: 36px;
+$title-huge: 64px;
+
+$text-extra-small: 11px;
+$text-small: 14px;
+$text-medium: 16px;
+$text-large: 20px;
+$text-huge: 24px;
+
+// Breakpoints
+$breakpoint-small: 768px;
+$breakpoint-medium: 992px;
+$breakpoint-large: 1200px;
+$breakpoint-huge: 1440px;
+
+$container-small: 750px;
+$container-medium: 970px;
+$container-large: 1170px;
+$container-huge: 1366px;

@@ -1,0 +1,9 @@
+@function strip-units($number) {
+  @return $number / 1;
+}
+
+@function rem($number) {
+  $number: strip-units($number);
+  $number: $number / 16;
+  @return #{$number}rem;
+}

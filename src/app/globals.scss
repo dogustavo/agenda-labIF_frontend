@@ -1,0 +1,73 @@
+:root {
+  --color-text: #41414d;
+  --color-background: #f7f8fa;
+  --color-primary: #4c8d39;
+  --color-secondary: #98c58b;
+  --color-accent: #3aff00;
+  --color-white: #fff;
+  --color-black: #000;
+}
+
+*,
+*::before,
+*::after {
+  outline: 0;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  min-height: 100%;
+  position: relative;
+  font-size: $text-medium;
+  margin: 0;
+
+  transition-property: color, background;
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
+}
+
+body {
+  overflow-x: hidden;
+  background-color: $color-background;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a,
+p {
+  transition: font-size 0.4s ease;
+  font-size: $text-small;
+  font-weight: 400;
+  color: $color-text;
+}
+
+a,
+button {
+  @media (hover: hover) {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
+button {
+  all: unset;
+}

@@ -1,0 +1,72 @@
+.main-login {
+  height: 100dvh;
+  padding: 0 rem(20);
+
+  .content {
+    display: grid;
+    align-items: center;
+  }
+
+  .wrapper {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    place-content: center;
+
+    .form-content {
+      background-color: $color-white;
+      border-radius: 8px;
+      box-shadow: 0px 0px 60px 0px rgba(0, 0, 0, 0.05);
+      padding: rem(48) rem(32);
+
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .form-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 8px;
+      h1 {
+        font-size: $title-small;
+      }
+
+      p {
+        opacity: 0.5;
+      }
+    }
+
+    .form-inputs {
+      width: 100%;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      margin-bottom: rem(34);
+    }
+
+    .register-button {
+      font-size: $text-small;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: rem(10);
+    }
+  }
+}
+
+@media (min-width: $breakpoint-small) {
+  .main-login {
+    .wrapper {
+      grid-template-columns: auto;
+      .form-inputs {
+        width: rem(380);
+      }
+    }
+  }
+}
