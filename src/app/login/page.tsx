@@ -6,12 +6,16 @@ import { Input, Button } from 'common'
 import styled from './styles.module.scss'
 import { useForm, FormProvider } from 'react-hook-form'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
   const methods = useForm()
+  const router = useRouter()
 
   const onSubmit = methods.handleSubmit(async (values) => {
     console.log('teste', values)
+
+    router.push('/')
   })
 
   return (

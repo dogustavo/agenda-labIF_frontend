@@ -1,0 +1,12 @@
+.go-back {
+  color: $color-primary;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  img {
+    transform: rotate(180deg);
+  }
+}

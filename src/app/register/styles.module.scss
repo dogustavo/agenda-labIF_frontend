@@ -1,6 +1,5 @@
 .main-login {
-  height: 100dvh;
-  padding: 0 rem(20);
+  padding: rem(40) 0;
 
   .content {
     display: grid;
@@ -12,6 +11,7 @@
     display: grid;
     grid-template-columns: 1fr;
     place-content: center;
+    margin-top: rem(54);
 
     .form-content {
       background-color: $color-white;
@@ -62,8 +62,12 @@
 
 @media (min-width: $breakpoint-small) {
   .main-login {
+    padding: rem(60) 0;
+
     .wrapper {
       grid-template-columns: auto;
+      margin-top: rem(48);
+
       .form-inputs {
         width: rem(380);
       }
