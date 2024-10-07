@@ -1,23 +1,38 @@
-'use client'
-
 import Image from 'next/image'
-import { Container, Input, Button, GoBack } from 'common'
+import { Container, GoBack } from 'common'
 
 import styled from './styles.module.scss'
-import { useForm, FormProvider } from 'react-hook-form'
 
-import { useRouter } from 'next/navigation'
+import RegisterForm from './form'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import type { IUserRegister } from 'types/auth'
 
-export default function Login() {
-  const router = useRouter()
+export default function Register() {
+  const token = cookies().get('user-auth')?.value
 
-  const methods = useForm()
+  if (!!token) {
+    redirect('/')
+  }
 
-  const onSubmit = methods.handleSubmit(async (values) => {
-    console.log('teste', values)
+  const handleSubmit = async (values: IUserRegister) => {
+    'use server'
+    console.log('valu', values)
 
-    router.push('/')
-  })
+    // const res = await authLogin({ login: values })
+
+    // if ('hasError' in res) {
+    //   return
+    // }
+
+    // cookies().set('user-auth', res.token, {
+    //   maxAge: 3600,
+    //   secure: true,
+    //   sameSite: 'strict'
+    // })
+
+    return undefined
+  }
 
   return (
     <main className={styled['main-login']}>
@@ -40,38 +55,7 @@ export default function Login() {
               </p>
             </div>
 
-            <FormProvider {...methods}>
-              <form onSubmit={onSubmit} noValidate>
-                <div className={styled['form-inputs']}>
-                  <Input
-                    label="Nome"
-                    name="name"
-                    placeholder="Nome"
-                    type="text"
-                  />
-                  <Input
-                    label="E-mail"
-                    name="email"
-                    placeholder="E-mail"
-                    type="email"
-                  />
-                  <Input
-                    name="password"
-                    label="Senha"
-                    placeholder="Senha"
-                    type="password"
-                  />
-                  <Input
-                    name="password_check"
-                    label="Confirme sua senha"
-                    placeholder="Confirme sua senha"
-                    type="password"
-                  />
-                </div>
-
-                <Button type="submit">Criar conta</Button>
-              </form>
-            </FormProvider>
+            <RegisterForm handleSubmit={handleSubmit} />
           </div>
         </div>
       </Container>

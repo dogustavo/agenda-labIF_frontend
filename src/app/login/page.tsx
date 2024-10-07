@@ -1,22 +1,40 @@
-'use client'
-
 import Image from 'next/image'
-import { Input, Button } from 'common'
 
 import styled from './styles.module.scss'
-import { useForm, FormProvider } from 'react-hook-form'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
-export default function Login() {
-  const methods = useForm()
-  const router = useRouter()
+import LoginForm from './form'
+import { authLogin } from 'services'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+interface IAuthForm {
+  email: string
+  password: string
+}
 
-  const onSubmit = methods.handleSubmit(async (values) => {
-    console.log('teste', values)
+export default async function Login() {
+  const token = cookies().get('user-auth')?.value
 
-    router.push('/')
-  })
+  if (!!token) {
+    redirect('/')
+  }
+
+  const handleSubmit = async (values: IAuthForm) => {
+    'use server'
+
+    const res = await authLogin({ login: values })
+
+    if ('hasError' in res) {
+      return
+    }
+
+    cookies().set('user-auth', res.token, {
+      maxAge: 3600,
+      secure: true,
+      sameSite: 'strict'
+    })
+
+    return res
+  }
 
   return (
     <main className={styled['main-login']}>
@@ -34,39 +52,7 @@ export default function Login() {
             <p>Para acessar, infome seus dados abaixo:</p>
           </div>
 
-          <FormProvider {...methods}>
-            <form onSubmit={onSubmit} noValidate>
-              <div className={styled['form-inputs']}>
-                <Input
-                  label="E-mail"
-                  name="email"
-                  placeholder="E-mail"
-                  type="email"
-                />
-                <Input
-                  name="password"
-                  label="Senha"
-                  placeholder="Senha"
-                  type="password"
-                />
-              </div>
-
-              <Button type="submit">Entrar</Button>
-
-              <Link
-                className={styled['register-button']}
-                href="/register"
-              >
-                <span>Não tenho cadastro</span>
-                <Image
-                  src="/svg/arrow_right.svg"
-                  width={12}
-                  height={12}
-                  alt="Seta apontando para direita"
-                />
-              </Link>
-            </form>
-          </FormProvider>
+          <LoginForm handleSubmit={handleSubmit} />
         </div>
       </div>
     </main>
