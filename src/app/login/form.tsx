@@ -8,24 +8,38 @@ import { useForm, FormProvider } from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import type { IAuth } from 'types/auth'
-
-interface IAuthForm {
-  email: string
-  password: string
-}
+import type { AuthStore, IAuth, IAuthForm } from 'types/auth'
+import { useAuth } from 'store/auth'
 
 interface ILoginProp {
-  handleSubmit: (data: IAuthForm) => Promise<IAuth | undefined>
+  handleSubmit: (data: IAuthForm) => Promise<{
+    data?: IAuth
+    error?: unknown
+  }>
 }
 
 export default function LoginForm({ handleSubmit }: ILoginProp) {
   const methods = useForm<IAuthForm>()
   const router = useRouter()
+  const { signIn } = useAuth((state: AuthStore) => state)
 
   const onSubmit = methods.handleSubmit(async (values) => {
     const user = await handleSubmit(values)
-    console.log('res', user)
+
+    if (user.error) {
+      console.error('user', user.error)
+      return
+    }
+
+    if (!user.data) {
+      console.error('user', user.error)
+      return
+    }
+
+    signIn({
+      ...user.data,
+      isAuth: true
+    })
     router.push('/')
   })
 

@@ -1,31 +1,30 @@
 import { fetcher } from 'services'
 
 import type { IAuth } from 'types/auth'
-
-interface IErrorHandler {
-  hasError: boolean
-  error: unknown
-}
+import { FetchError } from 'utils/fetcher'
 
 export async function authLogin({
   login
 }: {
   login: {
-    email: string
+    username: string
     password: string
   }
-}): Promise<IAuth | IErrorHandler> {
+}): Promise<{ data?: IAuth; error?: FetchError }> {
   try {
     const res = await fetcher<IAuth>(`/login`, {
       method: 'POST',
       body: JSON.stringify(login)
     })
 
-    return res
-  } catch (err: unknown) {
+    return { data: res }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { error }
+    }
+
     return {
-      error: err,
-      hasError: true
+      error: new FetchError('Unexpected error', 500, new Response())
     }
   }
 }

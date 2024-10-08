@@ -1,39 +1,45 @@
 import Image from 'next/image'
 
 import styled from './styles.module.scss'
-
 import LoginForm from './form'
 import { authLogin } from 'services'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-interface IAuthForm {
-  email: string
-  password: string
-}
+
+// import { redirect } from 'next/navigation'
+import { setCookie } from 'server/cookieAction'
+
+import { IAuth, IAuthForm } from 'types/auth'
 
 export default async function Login() {
-  const token = cookies().get('user-auth')?.value
+  // const token = cookies().get('user-auth')?.value
 
-  if (!!token) {
-    redirect('/')
-  }
+  // if (!!token) {
+  //   redirect('/')
+  // }
 
-  const handleSubmit = async (values: IAuthForm) => {
+  const handleSubmit = async (
+    values: IAuthForm
+  ): Promise<{
+    data?: IAuth
+    error?: unknown
+  }> => {
     'use server'
 
     const res = await authLogin({ login: values })
 
-    if ('hasError' in res) {
-      return
+    if (res.error?.statusCode === 404) {
+      return {
+        error: res.error.message
+      }
     }
 
-    cookies().set('user-auth', res.token, {
-      maxAge: 3600,
-      secure: true,
-      sameSite: 'strict'
-    })
+    if (!res.data) {
+      return {
+        error: 'Data missing'
+      }
+    }
 
-    return res
+    await setCookie('user-auth', res.data.token)
+    return { data: res.data }
   }
 
   return (

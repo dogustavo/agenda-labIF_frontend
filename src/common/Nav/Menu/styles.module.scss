@@ -1,0 +1,154 @@
+.menu-items,
+.menu-wrapper {
+  display: flex;
+  align-items: center;
+  gap: rem(12);
+}
+
+.menu-items {
+  flex-direction: column;
+}
+
+.menu-content {
+  position: absolute;
+  height: 0;
+  top: -110dvh;
+  right: rem(-20);
+  background-color: $color-white;
+
+  flex-direction: column;
+  z-index: 4;
+  visibility: hidden;
+  overflow: hidden;
+  width: 100dvw;
+
+  padding: rem(100) 0;
+  padding-bottom: rem(40);
+
+  transition-property: top, visibility;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
+
+  display: flex;
+  justify-content: space-between;
+
+  &.is-open {
+    top: -0.5rem;
+    visibility: visible;
+    height: 100dvh;
+  }
+}
+
+.menu-item {
+  color: $color-text;
+  font-weight: bold;
+
+  padding: 1rem 0.75rem;
+
+  width: 100%;
+  text-align: left;
+
+  &.active-page {
+    padding: 1rem;
+    border-left: 8px solid $color-primary;
+  }
+}
+
+.menu-mobile {
+  width: 24px;
+  height: 22px;
+  display: flex;
+  position: sticky;
+  z-index: 5;
+  right: 0;
+
+  span {
+    background-color: $color-text;
+    width: 100%;
+    height: 2px;
+    position: absolute;
+    transition: top 0.3s ease;
+
+    &:first-child {
+      top: 0;
+      left: 0;
+    }
+
+    &:nth-child(2) {
+      top: 50%;
+      left: 0;
+      opacity: 1;
+      transform: translateY(-50%);
+    }
+
+    &:last-child {
+      bottom: 0;
+      left: 0;
+    }
+  }
+
+  &.is-open {
+    span {
+      &:first-child {
+        top: 10px;
+        transform: rotate(45deg);
+      }
+
+      &:nth-child(2) {
+        opacity: 0;
+      }
+
+      &:last-child {
+        top: 10px;
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}
+
+.user-info {
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  p {
+    font-size: $text-medium;
+    color: $color-text;
+  }
+
+  span {
+    font-size: $text-extra-small;
+    color: $color-primary;
+  }
+}
+
+.overlay {
+  width: 100vw;
+  height: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  z-index: 1;
+
+  overflow: hidden;
+  top: 0;
+  right: 0;
+  opacity: 0;
+
+  transition: opacity 0.8s ease;
+
+  &.is-open {
+    height: 100vh;
+    opacity: 1;
+  }
+}
+
+@media (min-width: $breakpoint-small) {
+  .menu-content {
+    width: 30%;
+    right: -1rem;
+
+    padding: rem(100) 0;
+    padding-bottom: rem(32);
+  }
+}

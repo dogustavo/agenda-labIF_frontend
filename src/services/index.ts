@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers'
+import { getCookie } from 'server/cookieAction'
 
 export * from './auth'
 
@@ -8,7 +8,7 @@ export async function fetcher<T = unknown>(
   input: RequestInfo,
   init?: RequestInit
 ): Promise<T> {
-  const token = cookies().get('user-auth')?.value
+  const token = await getCookie('user-auth')
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}${input}`,
@@ -23,12 +23,19 @@ export async function fetcher<T = unknown>(
   )
 
   if (!response.ok) {
-    const errorMessage = await response.text()
+    const errorMessage = await response
+      .json()
+      .catch(() => response.text())
+
+    const message =
+      typeof errorMessage === 'object' && errorMessage !== null
+        ? errorMessage.message ||
+          errorMessage.error ||
+          'Erro desconhecido'
+        : errorMessage || response.statusText
 
     throw new FetchError(
-      `Error ${response.status}: ${
-        errorMessage || response.statusText
-      }`,
+      `Error ${response.status}: ${message}`,
       response.status,
       response
     )

@@ -1,3 +1,5 @@
+import { Nav } from 'common'
+
 export default function RootLayout({
   children
 }: Readonly<{
@@ -5,10 +7,8 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <header>
-        <span>menu</span>
-      </header>
-      <main>{children}</main>
+      <Nav />
+      <div>{children}</div>
     </>
   )
 }
