@@ -2,11 +2,13 @@
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import classnames from 'classnames'
 
-import styled from './styles.module.scss'
 import { USER_ROLES } from 'enums/Roles.enums'
 import { AuthStore } from 'types/auth'
 import { useAuth } from 'store/auth'
+
+import styled from './styles.module.scss'
 
 const menuItems = [
   {
@@ -43,20 +45,22 @@ const MenuButton = ({
 }: {
   isMenuOpen: boolean
   setIsMenuOpen: () => void
-}) => (
-  <button
-    type="button"
-    title="Botão menu"
-    className={`${styled['menu-mobile']} ${
-      isMenuOpen ? styled['is-open'] : ''
-    }`}
-    onClick={setIsMenuOpen}
-  >
-    <span />
-    <span />
-    <span />
-  </button>
-)
+}) => {
+  return (
+    <button
+      type="button"
+      title="Botão menu"
+      className={classnames(styled['menu-mobile'], {
+        [styled['is-open']]: isMenuOpen
+      })}
+      onClick={setIsMenuOpen}
+    >
+      <span />
+      <span />
+      <span />
+    </button>
+  )
+}
 
 const MenuItem = ({
   label,
@@ -77,9 +81,9 @@ const MenuItem = ({
   return (
     <Link
       key={label.toLocaleLowerCase()}
-      className={`${styled['menu-item']} ${
-        isActive ? styled['active-page'] : ''
-      }`}
+      className={classnames(styled['menu-item'], {
+        [styled['active-page']]: isActive
+      })}
       href={link}
     >
       {label}
@@ -117,9 +121,9 @@ export default function Menu() {
   return (
     <div className={styled['menu-wrapper']}>
       <div
-        className={`${styled['menu-content']} ${
-          isMenuOpen ? styled['is-open'] : ''
-        }`}
+        className={classnames(styled['menu-content'], {
+          [styled['is-open']]: isMenuOpen
+        })}
       >
         <div className={styled['menu-items']}>
           {menuItems.map((item) => (
@@ -150,9 +154,9 @@ export default function Menu() {
       />
 
       <div
-        className={`${styled.overlay} ${
-          isMenuOpen ? styled['is-open'] : ''
-        }`}
+        className={classnames(styled['overlay'], {
+          [styled['is-open']]: isMenuOpen
+        })}
         onClick={() => setIsMenuOpen(false)}
       />
     </div>
