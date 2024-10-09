@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 
 import type { AuthStore, IAuth, IAuthForm } from 'types/auth'
 import { useAuth } from 'store/auth'
+import { useState } from 'react'
 
 interface ILoginProp {
   handleSubmit: (data: IAuthForm) => Promise<{
@@ -21,17 +22,21 @@ interface ILoginProp {
 export default function LoginForm({ handleSubmit }: ILoginProp) {
   const methods = useForm<IAuthForm>()
   const router = useRouter()
+
+  const [isLoading, setIsLoading] = useState(false)
   const { signIn } = useAuth((state: AuthStore) => state)
 
   const onSubmit = methods.handleSubmit(async (values) => {
     const user = await handleSubmit(values)
 
     if (user.error) {
+      setIsLoading(false)
       console.error('user', user.error)
       return
     }
 
     if (!user.data) {
+      setIsLoading(false)
       console.error('user', user.error)
       return
     }
@@ -40,6 +45,7 @@ export default function LoginForm({ handleSubmit }: ILoginProp) {
       ...user.data,
       isAuth: true
     })
+    setIsLoading(false)
     router.push('/')
   })
 
@@ -61,7 +67,9 @@ export default function LoginForm({ handleSubmit }: ILoginProp) {
           />
         </div>
 
-        <Button type="submit">Entrar</Button>
+        <Button disabled={isLoading} type="submit">
+          {isLoading ? 'Carregando...' : 'Entrar'}
+        </Button>
 
         <Link className={styled['register-button']} href="/register">
           <span>Não tenho cadastro</span>

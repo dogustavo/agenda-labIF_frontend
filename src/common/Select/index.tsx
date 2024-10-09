@@ -4,6 +4,8 @@ import { useFormContext, Controller } from 'react-hook-form'
 
 import SelectComponent from './select'
 
+import styled from './styles.module.scss'
+
 interface ISelectProps {
   options: IOptions[]
   name: string
@@ -20,19 +22,30 @@ export default function Select({
   placeholder,
   name
 }: ISelectProps) {
-  const { control } = useFormContext()
+  const {
+    control,
+    formState: { errors }
+  } = useFormContext()
 
   return (
     <Controller
       name={name}
       control={control}
       render={({ field }) => (
-        <SelectComponent
-          {...field}
-          onChange={field.onChange}
-          options={options}
-          placeholder={placeholder || 'Selecione uma opção'}
-        />
+        <div>
+          <SelectComponent
+            {...field}
+            onChange={field.onChange}
+            options={options}
+            hasError={Boolean(errors[name])}
+            placeholder={placeholder || 'Selecione uma opção'}
+          />
+          {errors[name] && (
+            <p className={styled['error']}>
+              {errors[name]?.message as string}
+            </p>
+          )}
+        </div>
       )}
     />
   )

@@ -2,7 +2,7 @@
 
 import React, { InputHTMLAttributes } from 'react'
 import { useFormContext } from 'react-hook-form'
-
+import classnames from 'classnames'
 import styled from './style.module.scss'
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -32,18 +32,19 @@ export default function Input({
       <input
         {...register(name, { required })}
         {...rest}
-        className={`${styled['input-field']} ${
-          !!errors[name] ? styled['has-error'] : ''
-        }`}
+        className={classnames(styled['input-field'], {
+          [styled['has-error']]: !!errors[name]
+        })}
         id={name}
         type={type}
         placeholder={placeholder}
       />
 
       <label
-        className={`${styled['input-label']} ${
-          !!watch(name) ? styled.active : ''
-        }`}
+        className={classnames(styled['input-label'], {
+          [styled.active]: !!watch(name),
+          [styled['has-error']]: !!errors[name]
+        })}
         htmlFor={name}
       >
         {label}

@@ -20,6 +20,9 @@
       visibility: visible;
       top: 0.8rem;
     }
+    &.has-error {
+      color: #b61b1b;
+    }
   }
 
   .input-field {
@@ -49,7 +52,7 @@
     }
 
     &.has-error {
-      color: #b61b1b;
+      border-color: #b61b1b;
     }
 
     &:read-only {
