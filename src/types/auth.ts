@@ -11,10 +11,12 @@ export interface IAuthForm {
   password: string
 }
 
-export interface IUserRegister {
+export interface IUserRegisterProps {
   name: string
   email: string
   password: string
+}
+export interface IUserRegister extends IUserRegisterProps {
   password_check: string
 }
 

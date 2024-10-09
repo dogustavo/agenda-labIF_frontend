@@ -1,0 +1,83 @@
+.select-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 4px;
+  padding: rem(14) rem(20);
+
+  font-size: 12px;
+  line-height: 1.2rem;
+  color: $color-text;
+  font-weight: 700;
+
+  gap: 5px;
+  background-color: white;
+
+  border: 1px solid $color-primary;
+  border-radius: 6px;
+
+  width: -moz-available; /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+  width: stretch;
+
+  > span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 1px $color-secondary;
+  }
+}
+
+.select-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.select-content {
+  overflow: hidden;
+  background-color: $color-white;
+  border-radius: 6px;
+  z-index: 3;
+
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+
+  .select-viewport {
+    padding: 5px;
+  }
+}
+
+.select-item {
+  font-size: $text-medium;
+  line-height: 20px;
+  height: 25px;
+  padding: rem(14) rem(20);
+
+  border-radius: 3px;
+
+  display: flex;
+  align-items: center;
+  position: relative;
+  user-select: none;
+
+  transition-property: color, background-color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+
+  &[data-highlighted] {
+    outline: none;
+    background-color: $color-primary;
+    color: $color-white;
+    cursor: pointer;
+  }
+
+  &[data-disabled] {
+    color: $color-primary;
+    pointer-events: none;
+  }
+}

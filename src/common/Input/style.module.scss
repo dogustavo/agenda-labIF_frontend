@@ -35,6 +35,10 @@
 
     width: 100%;
 
+    &::placeholder {
+      color: $color-text;
+    }
+
     &:focus {
       border: 1px solid $color-primary;
       ~ .input-label {

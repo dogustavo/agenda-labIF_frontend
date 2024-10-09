@@ -8,13 +8,15 @@ import { authLogin } from 'services'
 import { setCookie } from 'server/cookieAction'
 
 import { IAuth, IAuthForm } from 'types/auth'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 export default async function Login() {
-  // const token = cookies().get('user-auth')?.value
+  const token = cookies().get('user-auth')?.value
 
-  // if (!!token) {
-  //   redirect('/')
-  // }
+  if (!!token) {
+    redirect('/')
+  }
 
   const handleSubmit = async (
     values: IAuthForm

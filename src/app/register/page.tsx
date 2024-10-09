@@ -7,9 +7,22 @@ import RegisterForm from './form'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import type { IUserRegister } from 'types/auth'
+import { getUsersTypes } from 'services/user'
+import { authRegister } from 'services'
+import { setCookie } from 'server/cookieAction'
 
-export default function Register() {
+export default async function Register() {
   const token = cookies().get('user-auth')?.value
+
+  const { data: userType } = await getUsersTypes()
+  const userOptions = userType
+    ? userType.data.map((ele) => {
+        return {
+          label: ele.description,
+          value: ele.description
+        }
+      })
+    : [{ label: 'Outros', value: 'Outros' }]
 
   if (!!token) {
     redirect('/')
@@ -17,21 +30,31 @@ export default function Register() {
 
   const handleSubmit = async (values: IUserRegister) => {
     'use server'
-    console.log('valu', values)
 
-    // const res = await authLogin({ login: values })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password_check, ...rest } = values
 
-    // if ('hasError' in res) {
-    //   return
-    // }
+    const user = {
+      ...rest,
+      role: 'user'
+    }
 
-    // cookies().set('user-auth', res.token, {
-    //   maxAge: 3600,
-    //   secure: true,
-    //   sameSite: 'strict'
-    // })
+    const register = await authRegister({ data: user })
 
-    return undefined
+    if (register.error) {
+      return {
+        error: register.error.message
+      }
+    }
+
+    if (!register.data) {
+      return {
+        error: 'Data missing'
+      }
+    }
+
+    await setCookie('user-auth', register.data.token)
+    return { data: register.data }
   }
 
   return (
@@ -55,7 +78,10 @@ export default function Register() {
               </p>
             </div>
 
-            <RegisterForm handleSubmit={handleSubmit} />
+            <RegisterForm
+              userType={userOptions}
+              handleSubmit={handleSubmit}
+            />
           </div>
         </div>
       </Container>
