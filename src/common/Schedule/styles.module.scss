@@ -1,0 +1,70 @@
+.schedule-card {
+  padding: rem(24) rem(16);
+  padding-bottom: rem(16);
+  background-color: $color-white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+  position: relative;
+  height: fit-content;
+
+  .schedule-status {
+    background-color: var(--badge-color, #007bff);
+    color: $color-white;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: $text-extra-small;
+    font-weight: 500;
+
+    position: absolute;
+    right: rem(16);
+    top: rem(10);
+  }
+
+  .schedule-header {
+    margin-bottom: rem(12);
+
+    h3 {
+      font-size: 18px;
+      color: $color-text;
+    }
+  }
+
+  .schedule-info {
+    display: flex;
+    align-items: center;
+    gap: rem(40);
+  }
+
+  .schedule-info-item {
+    span {
+      font-size: $text-extra-small;
+      color: #7f8fa4;
+    }
+
+    p {
+      margin-top: 5px;
+      color: $color-text;
+    }
+  }
+
+  .schedule-actions {
+    padding-top: rem(12);
+    border-top: 1px solid #eaeaea;
+    margin-top: rem(20);
+
+    display: flex;
+    align-items: center;
+    gap: rem(40);
+  }
+
+  .action {
+    font-weight: 700;
+    &.action-accept {
+      color: $color-primary;
+    }
+
+    &.action-deny {
+      color: #fd7e14;
+    }
+  }
+}

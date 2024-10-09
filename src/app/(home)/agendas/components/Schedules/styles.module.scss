@@ -1,0 +1,21 @@
+.schedule-section {
+  padding: rem(30) 0;
+
+  .schedules-wrapper {
+    display: grid;
+    grid-template-columns: unset;
+    grid-template-rows: 1fr;
+    gap: rem(18);
+  }
+}
+
+@media (min-width: $breakpoint-small) {
+  .schedule-section {
+    padding: rem(40) 0;
+
+    .schedules-wrapper {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: unset;
+    }
+  }
+}

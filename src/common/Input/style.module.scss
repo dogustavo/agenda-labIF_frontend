@@ -12,7 +12,7 @@
     visibility: hidden;
     transition: top 0.3s ease, visibility 0.5s ease, opacity 0.3s ease;
     color: $color-primary;
-    font-size: 12px;
+    font-size: $text-extra-small;
     line-height: 1.2rem;
 
     &.active {
@@ -65,7 +65,7 @@
 
   .error {
     text-align: right;
-    font-size: 12px;
+    font-size: $text-extra-small;
     color: #b61b1b;
   }
 }

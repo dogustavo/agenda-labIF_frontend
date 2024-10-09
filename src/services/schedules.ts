@@ -23,3 +23,28 @@ export async function getAllSchedules(): Promise<{
     }
   }
 }
+
+export async function evaluateSchedule({
+  id,
+  action
+}: {
+  id: number
+  action: string
+}): Promise<{
+  success: boolean
+}> {
+  try {
+    await fetcher(`/schedule/evaluate/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ action })
+    })
+
+    return { success: true }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { success: false }
+    }
+
+    return { success: true }
+  }
+}

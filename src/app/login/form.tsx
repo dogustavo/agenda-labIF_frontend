@@ -1,17 +1,22 @@
 'use client'
+import { useState } from 'react'
 
 import Image from 'next/image'
-import { Input, Button } from 'common'
-
-import styled from './styles.module.scss'
-import { useForm, FormProvider } from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import type { AuthStore, IAuth, IAuthForm } from 'types/auth'
-import { useAuth } from 'store/auth'
-import { useState } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
+import { Input, Button } from 'common'
+
+import { useAuth } from 'store/auth'
+
+import loginSchema from './validation'
+
+import styled from './styles.module.scss'
+
+import type { AuthStore, IAuth, IAuthForm } from 'types/auth'
 interface ILoginProp {
   handleSubmit: (data: IAuthForm) => Promise<{
     data?: IAuth
@@ -20,13 +25,16 @@ interface ILoginProp {
 }
 
 export default function LoginForm({ handleSubmit }: ILoginProp) {
-  const methods = useForm<IAuthForm>()
+  const methods = useForm<IAuthForm>({
+    resolver: zodResolver(loginSchema)
+  })
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(false)
   const { signIn } = useAuth((state: AuthStore) => state)
 
   const onSubmit = methods.handleSubmit(async (values) => {
+    setIsLoading(true)
     const user = await handleSubmit(values)
 
     if (user.error) {

@@ -1,4 +1,4 @@
-interface ISchedule {
+export interface ISchedule {
   id: number
   status: 'approved' | 'repproved' | 'pending'
   scheduledBy: string

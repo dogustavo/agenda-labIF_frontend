@@ -41,5 +41,5 @@ export async function fetcher<T = unknown>(
     )
   }
 
-  return (await response.json()) as T
+  return (await response.json().catch(() => ({}))) as T
 }
