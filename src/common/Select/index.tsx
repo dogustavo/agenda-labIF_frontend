@@ -10,6 +10,7 @@ interface ISelectProps {
   options: IOptions[]
   name: string
   placeholder?: string
+  defaultValue?: string
 }
 
 interface IOptions {
@@ -20,7 +21,8 @@ interface IOptions {
 export default function Select({
   options,
   placeholder,
-  name
+  name,
+  defaultValue
 }: ISelectProps) {
   const {
     control,
@@ -31,6 +33,7 @@ export default function Select({
     <Controller
       name={name}
       control={control}
+      defaultValue={defaultValue}
       render={({ field }) => (
         <div>
           <SelectComponent

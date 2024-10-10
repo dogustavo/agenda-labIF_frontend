@@ -1,3 +1,4 @@
 import Schedules from './Schedules'
+import Filters from './Filters'
 
-export { Schedules }
+export { Schedules, Filters }
