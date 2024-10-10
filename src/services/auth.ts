@@ -36,8 +36,6 @@ export async function authRegister({
   data: IUserRegisterProps
 }): Promise<{ data?: IUserResponse; error?: FetchError }> {
   try {
-    console.log('input', data)
-
     const res = await fetcher<IUserResponse>(`/register`, {
       method: 'POST',
       body: JSON.stringify(data)

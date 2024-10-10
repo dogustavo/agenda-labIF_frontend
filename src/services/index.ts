@@ -2,7 +2,7 @@ import { getCookie } from 'server/cookieAction'
 
 export * from './auth'
 
-import { FetchError } from 'utils/fetcher'
+import { handleResponse } from 'utils/apiErrorHandler'
 
 export async function fetcher<T = unknown>(
   input: RequestInfo,
@@ -22,24 +22,5 @@ export async function fetcher<T = unknown>(
     }
   )
 
-  if (!response.ok) {
-    const errorMessage = await response
-      .json()
-      .catch(() => response.text())
-
-    const message =
-      typeof errorMessage === 'object' && errorMessage !== null
-        ? errorMessage.message ||
-          errorMessage.error ||
-          'Erro desconhecido'
-        : errorMessage || response.statusText
-
-    throw new FetchError(
-      `Error ${response.status}: ${message}`,
-      response.status,
-      response
-    )
-  }
-
-  return (await response.json().catch(() => ({}))) as T
+  return handleResponse(response)
 }

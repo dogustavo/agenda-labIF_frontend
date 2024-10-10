@@ -16,6 +16,9 @@
   overflow: hidden;
   visibility: hidden;
 
+  width: 100%;
+  max-width: rem(350);
+
   &[data-state='open'] {
     animation: slideIn 150ms ease-in-out forwards;
   }

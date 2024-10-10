@@ -4,7 +4,6 @@ import styled from './styles.module.scss'
 import LoginForm from './form'
 import { authLogin } from 'services'
 
-// import { redirect } from 'next/navigation'
 import { setCookie } from 'server/cookieAction'
 
 import { IAuth, IAuthForm } from 'types/auth'

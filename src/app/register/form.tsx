@@ -1,6 +1,6 @@
 'use client'
 
-import { Input, Button, Select } from 'common'
+import { Input, Button, Select, Toast } from 'common'
 
 import styled from './styles.module.scss'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -13,6 +13,7 @@ import { IUserResponse } from 'types/user'
 import { useState } from 'react'
 
 import registerSchema from './validation'
+import { ToastStore, useToast } from 'store/notification'
 
 interface IRegisterProp {
   userType: {
@@ -34,21 +35,23 @@ export default function RegisterForm({
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+
   const { signIn } = useAuth((state: AuthStore) => state)
+  const { setShowToast } = useToast((state: ToastStore) => state)
 
   const onSubmit = methods.handleSubmit(async (values) => {
     setIsLoading(true)
     const register = await handleSubmit(values)
 
-    if (register?.error) {
-      setIsLoading(false)
-      console.error('user', register.error)
-      return
-    }
+    setIsLoading(false)
 
-    if (!register.data) {
-      setIsLoading(false)
-      console.error('user', register.error)
+    if (register?.error || !register.data) {
+      setShowToast({
+        isOpen: true,
+        type: 'error'
+      })
+      setErrorMessage(register.error as string)
       return
     }
 
@@ -60,45 +63,55 @@ export default function RegisterForm({
       role: register.data.role,
       isAuth: true
     })
-    setIsLoading(false)
     router.push('/')
   })
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={onSubmit} noValidate>
-        <div className={styled['form-inputs']}>
-          <Input
-            label="Nome"
-            name="name"
-            placeholder="Nome"
-            type="text"
-          />
-          <Input
-            label="E-mail"
-            name="email"
-            placeholder="E-mail"
-            type="email"
-          />
-          <Select name="userType" options={userType} />
-          <Input
-            name="password"
-            label="Senha"
-            placeholder="Senha"
-            type="password"
-          />
-          <Input
-            name="password_check"
-            label="Confirme sua senha"
-            placeholder="Confirme sua senha"
-            type="password"
-          />
-        </div>
+    <>
+      <FormProvider {...methods}>
+        <form onSubmit={onSubmit} noValidate>
+          <div className={styled['form-inputs']}>
+            <Input
+              label="Nome"
+              name="name"
+              placeholder="Nome"
+              type="text"
+            />
+            <Input
+              label="E-mail"
+              name="email"
+              placeholder="E-mail"
+              type="email"
+            />
+            <Select name="userType" options={userType} />
+            <Input
+              name="password"
+              label="Senha"
+              placeholder="Senha"
+              type="password"
+            />
+            <Input
+              name="password_check"
+              label="Confirme sua senha"
+              placeholder="Confirme sua senha"
+              type="password"
+            />
+          </div>
 
-        <Button disabled={isLoading} type="submit">
-          {isLoading ? 'Carregando...' : 'Criar conta'}
-        </Button>
-      </form>
-    </FormProvider>
+          <Button disabled={isLoading} type="submit">
+            {isLoading ? 'Carregando...' : 'Criar conta'}
+          </Button>
+        </form>
+      </FormProvider>
+
+      {errorMessage && (
+        <Toast.Root>
+          <Toast.Header title="Ops!" />
+          <Toast.Body>
+            <p>{errorMessage}</p>
+          </Toast.Body>
+        </Toast.Root>
+      )}
+    </>
   )
 }

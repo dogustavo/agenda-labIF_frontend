@@ -6,6 +6,10 @@ import { ToastStore, useToast } from 'store/notification'
 export default function Notification() {
   const { type } = useToast((state: ToastStore) => state)
 
+  if (!type) {
+    return ''
+  }
+
   return type === 'success' ? (
     <Toast.Root>
       <Toast.Header title="Sucesso!" />
