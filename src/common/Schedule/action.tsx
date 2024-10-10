@@ -8,6 +8,7 @@ import { evaluateSchedule } from 'services/schedules'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Modal, Button } from 'common'
+import { ToastStore, useToast } from 'store/notification'
 
 interface IActionProp {
   scheduleId: number
@@ -15,6 +16,8 @@ interface IActionProp {
 
 export default function ScheduleAction({ scheduleId }: IActionProp) {
   const router = useRouter()
+  const { setShowToast } = useToast((state: ToastStore) => state)
+
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [buttonAction, setButtonAction] = useState('')
@@ -35,12 +38,21 @@ export default function ScheduleAction({ scheduleId }: IActionProp) {
     setIsLoading(false)
 
     if (!res.success) {
-      console.log('deu ruim error')
+      setShowToast({
+        isOpen: true,
+        type: 'error'
+      })
+      setIsModalOpen(false)
+      setButtonAction('')
       return
     }
 
     setIsModalOpen(false)
     setButtonAction('')
+    setShowToast({
+      isOpen: true,
+      type: 'success'
+    })
     router.refresh()
   }
 
@@ -79,13 +91,15 @@ export default function ScheduleAction({ scheduleId }: IActionProp) {
           closeModal={() => setIsModalOpen(false)}
         />
         <Modal.Body>
-          Você está prestes a{' '}
-          {
-            { approved: 'aprovar', repproved: 'reprovar' }[
-              buttonAction
-            ]
-          }{' '}
-          este agendamento. Deseja continuar?
+          <p>
+            Você está prestes a{' '}
+            {
+              { approved: 'aprovar', repproved: 'reprovar' }[
+                buttonAction
+              ]
+            }{' '}
+            este agendamento. Deseja continuar?
+          </p>
         </Modal.Body>
         <Modal.Footer>
           <Button isInverted onClick={() => setIsModalOpen(false)}>

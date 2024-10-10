@@ -7,6 +7,7 @@ import Select from './Select'
 import ScheduleCard from './Schedule'
 
 import { Modal } from './Modal'
+import { Toast } from './Toast'
 
 export {
   Container,
@@ -16,5 +17,6 @@ export {
   Nav,
   Select,
   ScheduleCard,
-  Modal
+  Modal,
+  Toast
 }
