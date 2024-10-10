@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import './globals.scss'
 
+import NextTopLoader from 'nextjs-toploader'
+
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['300', '400', '500', '700']
@@ -28,7 +30,16 @@ export default function RootLayout({
           type="image/png"
         />
       </head>
-      <body className={roboto.className}>{children}</body>
+      <body className={roboto.className}>
+        <NextTopLoader
+          color="var(--color-primary)"
+          initialPosition={0.08}
+          height={3}
+          zIndex={8}
+          showSpinner={false}
+        />
+        {children}
+      </body>
     </html>
   )
 }

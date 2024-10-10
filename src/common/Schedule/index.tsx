@@ -27,7 +27,7 @@ const formatDate = (date: string) => {
     return ''
   }
 
-  const parseDate = parseISO(date)
+  const parseDate = parseISO(date.split('T')[0])
   return format(parseDate, 'dd/MM/yyyy')
 }
 

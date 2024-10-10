@@ -6,4 +6,15 @@ import Nav from './Nav'
 import Select from './Select'
 import ScheduleCard from './Schedule'
 
-export { Container, Input, Button, GoBack, Nav, Select, ScheduleCard }
+import { Modal } from './Modal'
+
+export {
+  Container,
+  Input,
+  Button,
+  GoBack,
+  Nav,
+  Select,
+  ScheduleCard,
+  Modal
+}

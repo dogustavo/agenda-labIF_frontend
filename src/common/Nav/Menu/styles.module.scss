@@ -11,13 +11,15 @@
 
 .menu-content {
   position: absolute;
-  height: 0;
-  top: -110dvh;
+  height: 100dvh;
+  top: -0.5rem;
   right: rem(-20);
   background-color: $color-white;
 
   flex-direction: column;
   z-index: 4;
+
+  opacity: 0;
   visibility: hidden;
   overflow: hidden;
   width: 100dvw;
@@ -25,17 +27,16 @@
   padding: rem(100) 0;
   padding-bottom: rem(40);
 
-  transition-property: top, visibility;
-  transition-duration: 0.3s;
-  transition-timing-function: ease-out;
+  transition-property: opacity, visibility;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
 
   display: flex;
   justify-content: space-between;
 
   &.is-open {
-    top: -0.5rem;
+    opacity: 1;
     visibility: visible;
-    height: 100dvh;
   }
 }
 
