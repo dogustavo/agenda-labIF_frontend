@@ -2,15 +2,27 @@ import { fetcher } from 'services'
 
 import type { IScheduleResponse } from 'types/schedule'
 import { FetchError } from 'utils/fetcher'
+import { formatQueryString } from 'utils/queryString'
 
-export async function getAllSchedules(): Promise<{
+export interface ISchedulesProp {
+  filter?: any
+}
+
+export async function getAllSchedules({
+  filter
+}: ISchedulesProp): Promise<{
   data?: IScheduleResponse
   error?: FetchError
 }> {
   try {
-    const res = await fetcher<IScheduleResponse>(`/schedule`, {
-      method: 'GET'
-    })
+    const strFilter = formatQueryString(filter)
+
+    const res = await fetcher<IScheduleResponse>(
+      `/schedule?${strFilter}`,
+      {
+        method: 'GET'
+      }
+    )
 
     return { data: res }
   } catch (error) {

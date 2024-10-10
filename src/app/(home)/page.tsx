@@ -1,5 +1,4 @@
 import { cookies } from 'next/headers'
-import styled from './styles.module.scss'
 import { redirect } from 'next/navigation'
 
 export default async function Home() {
@@ -10,7 +9,7 @@ export default async function Home() {
   }
 
   return (
-    <main className={styled['main-page']}>
+    <main>
       <h1>Bem vindo</h1>
     </main>
   )

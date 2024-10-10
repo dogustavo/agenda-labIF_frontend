@@ -11,7 +11,7 @@ export default function Schedules({
   schedules: ISchedule[]
 }) {
   return (
-    <section className={styled['schedule-section']}>
+    <div className={styled['schedule-section']}>
       <Container>
         <div className={styled['schedules-wrapper']}>
           {schedules.map((schedule) => (
@@ -21,6 +21,6 @@ export default function Schedules({
       </Container>
 
       <Notification />
-    </section>
+    </div>
   )
 }

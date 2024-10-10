@@ -3,9 +3,19 @@ import styled from './styles.module.scss'
 import { redirect } from 'next/navigation'
 
 import { Schedules } from './components'
+import { Container, Pagination } from 'common'
 
-export default async function Agenda() {
-  const { error, data: schedules } = await getAllSchedules()
+interface IPage {
+  searchParams: { [key: string]: any | null | undefined }
+}
+
+export default async function Agenda({ searchParams }: IPage) {
+  const { error, data: schedules } = await getAllSchedules({
+    filter: {
+      page: searchParams.page || 1,
+      ...searchParams
+    }
+  })
 
   if (error?.statusCode === 401) {
     return redirect('/login')
@@ -16,8 +26,15 @@ export default async function Agenda() {
   }
 
   return (
-    <div className={styled['main-page']}>
+    <section className={styled['main-schedules-page']}>
       <Schedules schedules={schedules.data} />
-    </div>
+
+      <Container>
+        <Pagination
+          searchParams={searchParams}
+          pagination={schedules.meta}
+        />
+      </Container>
+    </section>
   )
 }
