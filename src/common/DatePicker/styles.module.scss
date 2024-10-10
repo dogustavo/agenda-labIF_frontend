@@ -1,0 +1,70 @@
+.content {
+  position: relative;
+  width: 100%;
+
+  :global(.react-datepicker__close-icon) {
+    right: 6px;
+
+    &:after {
+      width: 16px;
+      height: 16px;
+      padding: 0;
+
+      display: block;
+
+      line-height: 16px;
+      font-size: rem(14);
+      background-color: $color-primary;
+    }
+  }
+
+  .input-label {
+    position: absolute;
+    top: 1.2rem;
+    left: 1rem;
+    z-index: 2;
+    transform: translateY(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: top 0.3s ease, visibility 0.5s ease, opacity 0.3s ease;
+    color: $color-primary;
+    font-size: $text-extra-small;
+    line-height: 1.2rem;
+
+    &.active {
+      opacity: 1;
+      visibility: visible;
+      top: 0.8rem;
+    }
+    &.has-error {
+      color: #b61b1b;
+    }
+  }
+
+  .date-picker {
+    padding: rem(16);
+    padding-top: 1.35rem;
+
+    background: $color-white;
+    color: $color-text;
+    font-weight: 700;
+    border: 1px solid #dcdce5;
+    box-sizing: border-box;
+    border-radius: 8px;
+
+    width: 100%;
+
+    &::placeholder {
+      color: $color-text;
+    }
+
+    &:focus {
+      border: 1px solid $color-primary;
+      ~ .input-label {
+        opacity: 1;
+        visibility: visible;
+        top: 0.8rem;
+      }
+    }
+  }
+}

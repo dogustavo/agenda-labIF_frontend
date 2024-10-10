@@ -2,7 +2,7 @@
 
 import { FormProvider, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-import { Button, Input, Select } from 'common'
+import { Button, Input, Select, DatePicker } from 'common'
 
 import styled from './styles.module.scss'
 import { formatQueryString } from 'utils/queryString'
@@ -29,8 +29,10 @@ export default function Filter({ searchParams }: IFilterProp) {
       ...values
     }
 
-    const queryString = formatQueryString(filter)
-    router.push(`/agendas?${queryString}`)
+    console.log('filter', filter)
+
+    // const queryString = formatQueryString(filter)
+    // router.push(`/agendas?${queryString}`)
   })
 
   const handleClearFilter = () => {
@@ -57,6 +59,11 @@ export default function Filter({ searchParams }: IFilterProp) {
                 { label: 'Reprovado', value: 'repproved' },
                 { label: 'Pendente', value: 'pending' }
               ]}
+            />
+            <DatePicker
+              name="date"
+              label="Data"
+              placeholder={'Selecione uma data'}
             />
           </div>
 
