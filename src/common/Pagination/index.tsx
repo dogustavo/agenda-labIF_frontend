@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { formatQueryString } from 'utils/queryString'
 
 interface IPagination {
-  pagination: {
+  pagination?: {
     currentPage: number
     pageSize: number
     totalPages: number
@@ -44,6 +44,10 @@ export default function Pagination({
   searchParams,
   pagination
 }: IPagination) {
+  if (!pagination) {
+    return <></>
+  }
+
   const { page: _page = 1, ...rest } = searchParams
 
   const handlePagination = (type: string): string => {
