@@ -7,6 +7,7 @@ import { Button, Input, Select, DatePicker } from 'common'
 import styled from './styles.module.scss'
 import { formatQueryString } from 'utils/queryString'
 import { useEffect } from 'react'
+import { format, parseISO } from 'date-fns'
 
 interface IFilterProp {
   searchParams: { [key: string]: any | null | undefined }
@@ -16,23 +17,41 @@ export default function Filter({ searchParams }: IFilterProp) {
   const methods = useForm()
   const router = useRouter()
 
-  const selectValue = searchParams.name || ''
+  // const selectValue = searchParams.status || ''
 
   useEffect(() => {
-    methods.setValue('name', searchParams.name)
+    if (searchParams.name) {
+      methods.setValue('name', searchParams.name)
+    }
+
+    if (searchParams.status) {
+      methods.setValue('status', searchParams.status)
+    }
+
+    if (searchParams.startDate && searchParams.endDate) {
+      methods.setValue('date', [
+        parseISO(searchParams.startDate),
+        parseISO(searchParams.endDate)
+      ])
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSubmit = methods.handleSubmit(async (values) => {
-    const filter = {
-      ...searchParams,
-      ...values
+    const { date, ...rest } = values
+
+    if (date?.length) {
+      rest.startDate = format(date[0], 'yyyy-MM-dd')
+      rest.endDate = format(date[1], 'yyyy-MM-dd')
     }
 
-    console.log('filter', filter)
+    const filter = {
+      ...searchParams,
+      ...rest
+    }
 
-    // const queryString = formatQueryString(filter)
-    // router.push(`/agendas?${queryString}`)
+    const queryString = formatQueryString(filter)
+    router.push(`/agendas?${queryString}`)
   })
 
   const handleClearFilter = () => {
@@ -53,7 +72,7 @@ export default function Filter({ searchParams }: IFilterProp) {
             />
             <Select
               name="status"
-              defaultValue={selectValue}
+              defaultValue={searchParams.status}
               options={[
                 { label: 'Aprovado', value: 'approved' },
                 { label: 'Reprovado', value: 'repproved' },

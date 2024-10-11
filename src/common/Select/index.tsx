@@ -33,12 +33,12 @@ export default function Select({
     <Controller
       name={name}
       control={control}
-      defaultValue={defaultValue}
       render={({ field }) => (
         <div>
           <SelectComponent
             {...field}
             onChange={field.onChange}
+            value={field.value || defaultValue}
             options={options}
             hasError={Boolean(errors[name])}
             placeholder={placeholder || 'Selecione uma opção'}

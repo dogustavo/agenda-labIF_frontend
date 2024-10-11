@@ -43,7 +43,6 @@ export default function Date({
             endDate={field.value ? field.value[1] : null}
             withPortal
             selectsRange
-            isClearable
             placeholderText={placeholder}
             locale="pt-BR"
             dateFormat="dd/MM/yyyy"
