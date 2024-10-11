@@ -6,6 +6,8 @@ import { NewPage } from '../components'
 
 import styled from './styles.module.scss'
 import { getAllEquipaments } from 'services'
+import Link from 'next/link'
+import Image from 'next/image'
 
 interface IPage {
   searchParams: { [key: string]: any | null | undefined }
@@ -40,7 +42,19 @@ export default async function NewSchedule({ searchParams }: IPage) {
   return (
     <section className={styled['main-schedules-new']}>
       <Container>
-        <NewPage.Header />
+        <div className={styled['schedules-header']}>
+          <Link href="/agendas" className={styled['button-schedule']}>
+            <Image
+              src="/svg/arrow_right.svg"
+              width={16}
+              height={16}
+              alt="icone de voltar"
+            />
+            <span>Voltar</span>
+          </Link>
+
+          <h1>Criar nova agenda</h1>
+        </div>
 
         <NewPage.Form equipamentsOptions={equipamentsOptions} />
       </Container>

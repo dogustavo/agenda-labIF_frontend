@@ -5,5 +5,5 @@ import { redirect } from 'next/navigation'
 
 export async function revalidateAll() {
   revalidatePath('/agendas')
-  redirect('/agendas/new')
+  redirect('/agendas/novo')
 }
