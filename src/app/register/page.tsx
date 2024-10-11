@@ -7,7 +7,7 @@ import RegisterForm from './form'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import type { IUserRegister } from 'types/auth'
-import { getUsersTypes } from 'services/user'
+import { getUsersTypes } from 'services'
 import { authRegister } from 'services'
 import { setCookie } from 'server/cookieAction'
 

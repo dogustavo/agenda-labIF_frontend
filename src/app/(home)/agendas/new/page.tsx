@@ -1,16 +1,51 @@
+import { Container } from 'common'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-export default async function NewSchedule() {
+import { NewPage } from '../components'
+
+import styled from './styles.module.scss'
+import { getAllEquipaments } from 'services'
+
+interface IPage {
+  searchParams: { [key: string]: any | null | undefined }
+}
+
+export default async function NewSchedule({ searchParams }: IPage) {
   const token = cookies().get('user-auth')?.value
+  const { error, data: equipaments } = await getAllEquipaments({
+    filter: {
+      page: searchParams.page || 1,
+      ...searchParams
+    }
+  })
+
+  const equipamentsOptions = equipaments?.data
+    ? equipaments.data.map((equipament) => {
+        return {
+          label: equipament.equipamentName,
+          value: equipament.id
+        }
+      })
+    : []
 
   if (!token) {
     redirect('/login')
   }
 
+  if (error?.statusCode === 401) {
+    return redirect('/login')
+  }
+
+  console.log('equipaments', equipaments?.data)
+
   return (
-    <main>
-      <h1>Nova agenda</h1>
-    </main>
+    <section className={styled['main-schedules-new']}>
+      <Container>
+        <NewPage.Header />
+
+        <NewPage.Form equipamentsOptions={equipamentsOptions} />
+      </Container>
+    </section>
   )
 }

@@ -54,6 +54,10 @@
 
     width: 100%;
 
+    &.has-error {
+      border-color: #b61b1b;
+    }
+
     &::placeholder {
       color: $color-text;
     }
@@ -66,5 +70,11 @@
         top: 0.8rem;
       }
     }
+  }
+
+  .error {
+    text-align: right;
+    font-size: $text-extra-small;
+    color: #b61b1b;
   }
 }

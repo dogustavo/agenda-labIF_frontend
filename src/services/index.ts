@@ -1,6 +1,8 @@
 import { getCookie } from 'server/cookieAction'
 
 export * from './auth'
+export * from './user'
+export * from './equipaments'
 
 import { handleResponse } from 'utils/apiErrorHandler'
 

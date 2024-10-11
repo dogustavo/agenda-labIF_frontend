@@ -7,7 +7,7 @@ import SelectComponent from './select'
 import styled from './styles.module.scss'
 
 interface ISelectProps {
-  options: IOptions[]
+  options: IOptions[] | []
   name: string
   placeholder?: string
   defaultValue?: string
@@ -15,7 +15,7 @@ interface ISelectProps {
 
 interface IOptions {
   label: string
-  value: string
+  value: string | number
 }
 
 export default function Select({

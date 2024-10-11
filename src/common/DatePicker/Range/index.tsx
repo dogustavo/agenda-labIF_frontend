@@ -6,7 +6,7 @@ import DatePicker, { registerLocale } from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { ptBR } from 'date-fns/locale'
 
-import styled from './styles.module.scss'
+import styled from '../styles.module.scss'
 import classNames from 'classnames'
 
 interface IDateProps {

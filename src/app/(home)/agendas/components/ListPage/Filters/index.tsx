@@ -2,7 +2,7 @@
 
 import { FormProvider, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-import { Button, Input, Select, DatePicker } from 'common'
+import { Button, Input, Select, DatePickerRange } from 'common'
 
 import styled from './styles.module.scss'
 import { formatQueryString } from 'utils/queryString'
@@ -79,7 +79,7 @@ export default function Filter({ searchParams }: IFilterProp) {
                 { label: 'Pendente', value: 'pending' }
               ]}
             />
-            <DatePicker
+            <DatePickerRange
               name="date"
               label="Data"
               placeholder={'Selecione uma data'}

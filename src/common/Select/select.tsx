@@ -15,7 +15,7 @@ interface ISelectProps {
 
 interface IOptions {
   label: string
-  value: string
+  value: string | number
 }
 
 const SelectComponent = React.forwardRef<
@@ -60,7 +60,7 @@ const SelectComponent = React.forwardRef<
                   <Select.Item
                     key={id}
                     className={styled['select-item']}
-                    value={option.value}
+                    value={String(option.value)}
                   >
                     <Select.ItemText>{option.label}</Select.ItemText>
                   </Select.Item>

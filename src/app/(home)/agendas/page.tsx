@@ -2,7 +2,7 @@ import { getAllSchedules } from 'services/schedules'
 import styled from './styles.module.scss'
 import { redirect } from 'next/navigation'
 
-import { Schedules, Filters, Header } from './components'
+import { ListPage } from './components'
 import { Container, Pagination } from 'common'
 
 interface IPage {
@@ -24,12 +24,12 @@ export default async function Agenda({ searchParams }: IPage) {
   return (
     <section className={styled['main-schedules-page']}>
       <Container>
-        <Header />
+        <ListPage.Header />
       </Container>
       <Container>
-        <Filters searchParams={searchParams} />
+        <ListPage.Filters searchParams={searchParams} />
       </Container>
-      <Schedules schedules={schedules?.data} />
+      <ListPage.Schedules schedules={schedules?.data} />
 
       <Container>
         <Pagination

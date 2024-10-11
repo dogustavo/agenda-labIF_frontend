@@ -1,5 +1,2 @@
-import Header from './Header'
-import Filters from './Filters'
-import Schedules from './Schedules'
-
-export { Schedules, Filters, Header }
+export * as ListPage from './ListPage'
+export * as NewPage from './NewPage'

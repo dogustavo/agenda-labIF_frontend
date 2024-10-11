@@ -6,7 +6,7 @@ import Nav from './Nav'
 import Select from './Select'
 import ScheduleCard from './Schedule'
 import Pagination from './Pagination'
-import DatePicker from './DatePicker'
+import { DatePickerRange, DatePicker } from './DatePicker'
 
 import { Modal } from './Modal'
 import { Toast } from './Toast'
@@ -22,5 +22,6 @@ export {
   Modal,
   Toast,
   Pagination,
+  DatePickerRange,
   DatePicker
 }
