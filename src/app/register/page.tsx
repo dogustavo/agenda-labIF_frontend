@@ -54,6 +54,7 @@ export default async function Register() {
     }
 
     await setCookie('user-auth', register.data.token)
+    await setCookie('user-role', register.data.role)
     return { data: register.data }
   }
 

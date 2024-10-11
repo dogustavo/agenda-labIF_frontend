@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import classnames from 'classnames'
 
@@ -9,6 +9,8 @@ import { AuthStore } from 'types/auth'
 import { useAuth } from 'store/auth'
 
 import styled from './styles.module.scss'
+import Image from 'next/image'
+import { removeCookie } from 'server/cookieAction'
 
 const menuItems = [
   {
@@ -32,9 +34,9 @@ const menuItems = [
     ]
   },
   {
-    label: 'Usuários',
-    slug: 'users',
-    link: '/users',
+    label: 'Equipamentos',
+    slug: 'equipamentos',
+    link: '/equipamentos',
     role: [USER_ROLES.USER_ADMIN]
   }
 ]
@@ -93,11 +95,13 @@ const MenuItem = ({
 
 export default function Menu() {
   const pathname = usePathname()
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const {
     role,
     name: userName,
-    email
+    email,
+    signOut
   } = useAuth((state: AuthStore) => state)
 
   const checkActivePage = (page: string): boolean => {
@@ -117,6 +121,13 @@ export default function Menu() {
     setIsMenuOpen(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
+
+  const handleLogout = async () => {
+    await removeCookie('user-auth')
+    await removeCookie('user-role')
+    signOut()
+    router.push('/login')
+  }
 
   return (
     <div className={styled['menu-wrapper']}>
@@ -144,7 +155,18 @@ export default function Menu() {
             <span>{email}</span>
           </div>
 
-          <button>Sair</button>
+          <button
+            type="button"
+            onClick={handleLogout}
+            aria-label="Sair"
+          >
+            <Image
+              src="/svg/logout.svg"
+              width={24}
+              height={24}
+              alt="Icone de sair"
+            />
+          </button>
         </div>
       </div>
 

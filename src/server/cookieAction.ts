@@ -14,3 +14,10 @@ export const setCookie = async (name: string, value: string) => {
     maxAge: 60 * 60
   })
 }
+
+export const removeCookie = async (name: string) => {
+  cookies().set(name, '', {
+    maxAge: -1,
+    path: '/'
+  })
+}
