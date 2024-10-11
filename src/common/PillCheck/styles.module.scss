@@ -1,0 +1,41 @@
+.checkbox {
+  box-sizing: border-box;
+
+  label {
+    cursor: pointer;
+    display: block;
+    padding: rem(18);
+
+    border-radius: 4px;
+    border: 1px solid $color-primary;
+    color: $color-primary;
+
+    font-size: $text-medium;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+
+    background-color: $color-white;
+    transition: color 0.5s ease, background-color 0.5s ease;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: $color-primary;
+        color: $color-white;
+      }
+    }
+  }
+
+  input[type='checkbox'] {
+    display: none;
+  }
+
+  input:checked + label {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+}

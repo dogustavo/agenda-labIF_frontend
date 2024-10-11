@@ -37,8 +37,6 @@ export default async function NewSchedule({ searchParams }: IPage) {
     return redirect('/login')
   }
 
-  console.log('equipaments', equipaments?.data)
-
   return (
     <section className={styled['main-schedules-new']}>
       <Container>

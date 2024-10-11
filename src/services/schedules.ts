@@ -1,6 +1,10 @@
 import { fetcher } from 'services'
 
-import type { IScheduleResponse } from 'types/schedule'
+import type {
+  ICreatSchedule,
+  ISchedule,
+  IScheduleResponse
+} from 'types/schedule'
 import { FetchError } from 'utils/fetcher'
 import { formatQueryString } from 'utils/queryString'
 
@@ -58,5 +62,29 @@ export async function evaluateSchedule({
     }
 
     return { success: true }
+  }
+}
+
+export async function createSchedule(
+  params: ICreatSchedule
+): Promise<{
+  data?: ISchedule
+  error?: FetchError
+}> {
+  try {
+    const res = await fetcher<ISchedule>('/schedule', {
+      method: 'POST',
+      body: JSON.stringify(params)
+    })
+
+    return { data: res }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { error }
+    }
+
+    return {
+      error: new FetchError('Unexpected error', 500, new Response())
+    }
   }
 }

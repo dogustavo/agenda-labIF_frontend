@@ -4,9 +4,13 @@ import { Toast } from 'common'
 import { ToastStore, useToast } from 'store/notification'
 
 export default function Notification() {
-  const { type } = useToast((state: ToastStore) => state)
+  const { type, path } = useToast((state: ToastStore) => state)
 
   if (!type) {
+    return ''
+  }
+
+  if (path !== '/agendas') {
     return ''
   }
 

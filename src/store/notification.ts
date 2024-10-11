@@ -2,6 +2,7 @@ import { create } from 'zustand'
 
 export interface IToast {
   isOpen: boolean
+  path?: string
   type?: 'success' | 'error' | null
 }
 
@@ -12,7 +13,8 @@ export interface ToastStore extends IToast {
 
 const initialState: IToast = {
   isOpen: false,
-  type: null
+  type: null,
+  path: ''
 }
 
 export const useToast = create<ToastStore>()((set) => ({

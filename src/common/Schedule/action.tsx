@@ -40,6 +40,7 @@ export default function ScheduleAction({ scheduleId }: IActionProp) {
     if (!res.success) {
       setShowToast({
         isOpen: true,
+        path: '/agendas',
         type: 'error'
       })
       setIsModalOpen(false)
@@ -51,6 +52,7 @@ export default function ScheduleAction({ scheduleId }: IActionProp) {
     setButtonAction('')
     setShowToast({
       isOpen: true,
+      path: '/agendas',
       type: 'success'
     })
     router.refresh()

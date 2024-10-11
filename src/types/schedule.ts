@@ -20,3 +20,10 @@ export interface IScheduleResponse {
   data: ISchedule[]
   meta: IMeta
 }
+
+export interface ICreatSchedule {
+  equipamentId: number
+  scheduleDate: string
+  timeInit: string
+  timeEnd: string
+}

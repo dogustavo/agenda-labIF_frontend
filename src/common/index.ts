@@ -7,6 +7,7 @@ import Select from './Select'
 import ScheduleCard from './Schedule'
 import Pagination from './Pagination'
 import { DatePickerRange, DatePicker } from './DatePicker'
+import PillCheck from './PillCheck'
 
 import { Modal } from './Modal'
 import { Toast } from './Toast'
@@ -23,5 +24,6 @@ export {
   Toast,
   Pagination,
   DatePickerRange,
-  DatePicker
+  DatePicker,
+  PillCheck
 }

@@ -9,7 +9,7 @@ export default function NewScheduleHeader() {
   return (
     <div className={styled['schedules-header']}>
       <button
-        onClick={() => router.back()}
+        onClick={() => router.push('/agendas')}
         className={styled['button-schedule']}
       >
         <Image
