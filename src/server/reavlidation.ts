@@ -7,3 +7,8 @@ export async function revalidateAll() {
   revalidatePath('/agendas')
   redirect('/agendas/novo')
 }
+
+export async function revalidateEquipaments(redirectTo: string) {
+  revalidatePath('/equipamentos')
+  redirect(redirectTo)
+}

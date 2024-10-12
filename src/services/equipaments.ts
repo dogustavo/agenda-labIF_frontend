@@ -1,6 +1,10 @@
 import { fetcher } from 'services'
 
-import type { IEquipamentsResponse } from 'types/equipaments'
+import type {
+  ICreatEquipament,
+  IEquipaments,
+  IEquipamentsResponse
+} from 'types/equipaments'
 import { FetchError } from 'utils/fetcher'
 import { formatQueryString } from 'utils/queryString'
 
@@ -41,6 +45,27 @@ export async function getAllEquipaments({
   }
 }
 
+export async function getEquipament(id: string): Promise<{
+  data?: IEquipaments
+  error?: FetchError
+}> {
+  try {
+    const res = await fetcher<IEquipaments>(`/equipaments/${id}`, {
+      method: 'GET'
+    })
+
+    return { data: res }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { error }
+    }
+
+    return {
+      error: new FetchError('Unexpected error', 500, new Response())
+    }
+  }
+}
+
 export async function getEquipamentDisponibility({
   equipamentId,
   selectedDay
@@ -56,6 +81,58 @@ export async function getEquipamentDisponibility({
         method: 'GET'
       }
     )
+
+    return { data: res }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { error }
+    }
+
+    return {
+      error: new FetchError('Unexpected error', 500, new Response())
+    }
+  }
+}
+
+export async function createEquipament(
+  params: ICreatEquipament
+): Promise<{
+  data?: IEquipaments
+  error?: FetchError
+}> {
+  try {
+    const res = await fetcher<IEquipaments>('/equipaments', {
+      method: 'POST',
+      body: JSON.stringify(params)
+    })
+
+    return { data: res }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { error }
+    }
+
+    return {
+      error: new FetchError('Unexpected error', 500, new Response())
+    }
+  }
+}
+
+export async function editEquipament({
+  params,
+  id
+}: {
+  params: ICreatEquipament
+  id: number
+}): Promise<{
+  data?: IEquipaments
+  error?: FetchError
+}> {
+  try {
+    const res = await fetcher<IEquipaments>(`/equipaments/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(params)
+    })
 
     return { data: res }
   } catch (error) {

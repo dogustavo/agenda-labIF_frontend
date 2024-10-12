@@ -62,7 +62,7 @@ export default function Equipaments({
             <div className={styled['equipament-info']}>
               <Link
                 className={styled['action-button']}
-                href={`/equipamentos${equipament.id}`}
+                href={`/equipamentos/${equipament.id}`}
               >
                 <Image
                   src="/svg/edit.svg"

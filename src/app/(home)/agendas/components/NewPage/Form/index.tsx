@@ -74,7 +74,7 @@ export default function NewScheduleForm({
       return
     }
     if (!data) {
-      setAlertMessage('Não foi possível encontra disponibilidade')
+      setAlertMessage('Não foi possível criar agenda!')
       setShowToast({
         isOpen: true,
         type: 'error'
@@ -82,7 +82,7 @@ export default function NewScheduleForm({
       return
     }
 
-    setAlertMessage('Agentamento criado com sucesso')
+    setAlertMessage('Equipamento criado com sucesso')
     setShowToast({
       isOpen: true,
       type: 'success'

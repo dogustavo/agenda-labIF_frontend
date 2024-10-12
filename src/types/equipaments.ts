@@ -16,3 +16,9 @@ export interface IEquipamentsResponse {
   data: IEquipaments[]
   meta: IMeta
 }
+
+export interface ICreatEquipament {
+  equipamentName: string
+  availableFrom: string
+  availableTo: string
+}

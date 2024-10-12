@@ -10,16 +10,20 @@ const adminRoutes = ['/equipamentos']
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  const isAdminRoute = adminRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  )
+
   if (publicRoutes.includes(pathname)) {
     return cookieMiddleware(request)
   }
 
-  if (adminRoutes.includes(pathname)) {
+  if (isAdminRoute) {
     return routeMiddleware(request)
   }
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/equipamentos', '/login']
+  matcher: ['/equipamentos/:path*', '/login']
 }
