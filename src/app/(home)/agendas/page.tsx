@@ -44,6 +44,7 @@ export default async function Agenda({ searchParams }: IPage) {
 
       <Container>
         <Pagination
+          path="agendas"
           searchParams={searchParams}
           pagination={schedules?.meta}
         />

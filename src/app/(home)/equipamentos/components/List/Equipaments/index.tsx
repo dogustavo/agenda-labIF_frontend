@@ -6,6 +6,8 @@ import Image from 'next/image'
 import { IEquipaments } from 'types/equipaments'
 import Link from 'next/link'
 
+import { formatHour } from 'utils/time'
+
 export default function Equipaments({
   equipaments
 }: {
@@ -33,6 +35,12 @@ export default function Equipaments({
 
   return (
     <div className={styled['equipaments-section']}>
+      <div className={styled['equipament-table-header']}>
+        <span>Nome:</span>
+        <span>Disponível apartir de:</span>
+        <span>Disponível até:</span>
+        <span></span>
+      </div>
       <div className={styled['equipaments-wrapper']}>
         {equipaments.map((equipament) => (
           <div
@@ -40,21 +48,28 @@ export default function Equipaments({
             key={equipament.id}
           >
             <div className={styled['equipament-info']}>
-              <span>Nome</span>
+              <span>Nome:</span>
               <p>{equipament.equipamentName}</p>
             </div>
             <div className={styled['equipament-info']}>
-              <span>Disponível apartir de</span>
-              <p>{equipament.availableFrom}</p>
+              <span>Disponível apartir de:</span>
+              <p>{formatHour(equipament.availableFrom)}</p>
             </div>
             <div className={styled['equipament-info']}>
-              <span>Disponível até</span>
-              <p>{equipament.availableTo}</p>
+              <span>Disponível até:</span>
+              <p>{formatHour(equipament.availableTo)}</p>
             </div>
             <div className={styled['equipament-info']}>
-              <span>Ação: </span>
-              <Link href={`/equipamentos${equipament.id}`}>
-                Editar
+              <Link
+                className={styled['action-button']}
+                href={`/equipamentos${equipament.id}`}
+              >
+                <Image
+                  src="/svg/edit.svg"
+                  alt="Icone de lapes no centro do botão editar equipamento"
+                  width={22}
+                  height={22}
+                />
               </Link>
             </div>
           </div>

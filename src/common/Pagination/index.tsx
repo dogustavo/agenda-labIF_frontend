@@ -11,6 +11,7 @@ interface IPagination {
     totalPages: number
     totalRecords: number
   }
+  path: string
   searchParams: { [key: string]: any | null | undefined }
 }
 
@@ -42,6 +43,7 @@ const PaginateItem = ({
 
 export default function Pagination({
   searchParams,
+  path,
   pagination
 }: IPagination) {
   if (!pagination) {
@@ -65,7 +67,7 @@ export default function Pagination({
 
     const queryString = formatQueryString(filter)
 
-    return `/agendas?${queryString}`
+    return `/${path}?${queryString}`
   }
 
   return (

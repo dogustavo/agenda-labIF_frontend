@@ -1,3 +1,5 @@
+import { format, parseISO } from 'date-fns'
+
 export const areTimesConsecutive = (times: string[]) => {
   const sortedTimes = times
     .map((time) => parseInt(time.replace(':', '')))
@@ -26,4 +28,20 @@ export function addOneHour(time: string): string {
   const formattedMinutes = String(minutes).padStart(2, '0')
 
   return `${formattedHours}:${formattedMinutes}`
+}
+
+export const formatHour = (hour: string) => {
+  if (!hour) {
+    return ''
+  }
+  return `${String(hour.split(':')[0]).padStart(2, '0')}:00`
+}
+
+export const formatDate = (date: string) => {
+  if (!date) {
+    return ''
+  }
+
+  const parseDate = parseISO(date.split('T')[0])
+  return format(parseDate, 'dd/MM/yyyy')
 }

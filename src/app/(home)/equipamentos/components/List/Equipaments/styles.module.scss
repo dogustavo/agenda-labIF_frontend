@@ -16,15 +16,18 @@
     height: fit-content;
 
     display: grid;
-    place-content: center;
-    grid-template-columns: repeat(4, 1fr);
+    place-content: unset;
+    grid-template-columns: unset;
+    grid-template-rows: 1fr;
+    width: 100%;
     gap: 8px;
 
     &:nth-child(even) {
       background-color: $color-text;
       color: $color-white;
 
-      p {
+      p,
+      a {
         color: $color-white;
       }
     }
@@ -34,14 +37,28 @@
     }
   }
 
+  .equipament-table-header {
+    display: none;
+  }
+
   .equipament-info {
     display: flex;
     gap: 6px;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
 
     &:last-child {
-      justify-self: center;
+      display: flex;
+      justify-content: flex-end;
     }
+  }
+
+  .action-button {
+    background-color: $color-primary;
+    padding: 6px;
+    border-radius: 4px;
   }
 }
 
@@ -63,6 +80,34 @@
       font-style: normal;
       font-weight: 600;
       line-height: 32px;
+    }
+  }
+}
+
+@media (min-width: $breakpoint-small) {
+  .equipaments-section {
+    .equipament-info {
+      span {
+        display: none;
+      }
+    }
+
+    .equipament-table-header {
+      display: grid;
+      margin-bottom: rem(18);
+      padding: rem(24) rem(16);
+      background-color: $color-text;
+      color: $color-background;
+      font-weight: 700;
+      border-radius: 8px 8px 0 0;
+      box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    .equipament-item,
+    .equipament-table-header {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: unset;
+      place-content: center;
     }
   }
 }

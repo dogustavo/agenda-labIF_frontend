@@ -1,7 +1,8 @@
 import type { ISchedule } from 'types/schedule'
 import styled from './styles.module.scss'
-import { format, parseISO } from 'date-fns'
 import ScheduleAction from './action'
+
+import { formatDate, formatHour } from 'utils/time'
 
 const statusColors: Record<string, string> = {
   approved: '#629B51',
@@ -13,22 +14,6 @@ const statusName: Record<string, string> = {
   approved: 'Aprovado',
   repproved: 'Reprovado',
   pending: 'Pendente'
-}
-
-const formatHour = (hour: string) => {
-  if (!hour) {
-    return ''
-  }
-  return `${String(hour.split(':')[0]).padStart(2, '0')}:00`
-}
-
-const formatDate = (date: string) => {
-  if (!date) {
-    return ''
-  }
-
-  const parseDate = parseISO(date.split('T')[0])
-  return format(parseDate, 'dd/MM/yyyy')
 }
 
 export default function ScheduleCard({

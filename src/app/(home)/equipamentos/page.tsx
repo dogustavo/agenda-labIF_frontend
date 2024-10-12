@@ -1,4 +1,4 @@
-import { Button, Container } from 'common'
+import { Button, Container, Pagination } from 'common'
 import { redirect } from 'next/navigation'
 import { getAllEquipaments } from 'services'
 
@@ -6,6 +6,7 @@ import styled from './styles.module.scss'
 import Link from 'next/link'
 
 import Equipaments from './components/List/Equipaments'
+import Filter from './components/List/Filter'
 
 interface IPage {
   searchParams: { [key: string]: any | null | undefined }
@@ -38,7 +39,15 @@ export default async function Equipamentos({ searchParams }: IPage) {
           </div>
         </div>
 
+        <Filter searchParams={searchParams} />
+
         <Equipaments equipaments={equipaments?.data} />
+
+        <Pagination
+          path="equipamentos"
+          searchParams={searchParams}
+          pagination={equipaments?.meta}
+        />
       </Container>
     </section>
   )
