@@ -10,7 +10,7 @@ import { getEquipamentDisponibility } from 'services'
 import { ToastStore, useToast } from 'store/notification'
 import { addOneHour, areTimesConsecutive } from 'utils/time'
 import { createSchedule } from 'services/schedules'
-import { revalidateAll } from 'server/reavlidation'
+import { revalidateGeneral } from 'server/reavlidation'
 import Link from 'next/link'
 
 interface IFormProp {
@@ -63,6 +63,7 @@ export default function NewScheduleForm({
     }
 
     const { error, data } = await createSchedule(schedule)
+
     setScheduleLoadiing(false)
 
     if (!!error) {
@@ -90,7 +91,11 @@ export default function NewScheduleForm({
 
     setEquipamentDisponibility([])
     methods.reset()
-    await revalidateAll()
+
+    await revalidateGeneral({
+      path: '/agendas',
+      redirectTo: '/agendas/novo'
+    })
   })
 
   const validateForm = (values: IFormValues) => {

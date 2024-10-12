@@ -7,7 +7,7 @@ import styled from './styles.module.scss'
 import { useState } from 'react'
 import { createEquipament } from 'services'
 import { ToastStore, useToast } from 'store/notification'
-import { revalidateEquipaments } from 'server/reavlidation'
+import { revalidateGeneral } from 'server/reavlidation'
 import Link from 'next/link'
 
 const timesOptions = [
@@ -92,7 +92,10 @@ export default function NewEquipamentForm() {
     })
 
     methods.reset()
-    await revalidateEquipaments(`/equipamentos/novo`)
+    await revalidateGeneral({
+      path: '/equipamentos',
+      redirectTo: `/equipamentos/novo`
+    })
   })
 
   const validateForm = (values: IFormValues) => {

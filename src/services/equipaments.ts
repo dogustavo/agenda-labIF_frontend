@@ -74,6 +74,7 @@ export async function getEquipamentDisponibility({
   error?: FetchError
 }> {
   const strFilter = formatQueryString({ selectedDay })
+
   try {
     const res = await fetcher<{ availableTimes: string[] }>(
       `/equipaments/availability/${equipamentId}?${strFilter}`,

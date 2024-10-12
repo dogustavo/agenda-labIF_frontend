@@ -33,7 +33,7 @@ export default async function Equipamentos({ searchParams }: IPage) {
           <div className={styled['button-new-equipament']}>
             <Button asChild>
               <Link href="/equipamentos/novo">
-                <span>Novo Equipamento</span>
+                <span>Novo</span>
               </Link>
             </Button>
           </div>

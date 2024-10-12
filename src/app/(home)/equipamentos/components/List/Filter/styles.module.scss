@@ -15,7 +15,7 @@
   }
 
   .inputs {
-    width: 70%;
+    width: 100%;
     display: grid;
     grid-template-columns: unset;
     grid-template-rows: 1fr;
@@ -50,6 +50,7 @@
       gap: 1rem;
     }
     .inputs {
+      width: 70%;
       grid-template-columns: repeat(1, 1fr);
     }
 

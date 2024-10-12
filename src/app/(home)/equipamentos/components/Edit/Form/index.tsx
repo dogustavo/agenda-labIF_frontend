@@ -7,7 +7,7 @@ import styled from './styles.module.scss'
 import { useEffect, useState } from 'react'
 import { editEquipament } from 'services'
 import { ToastStore, useToast } from 'store/notification'
-import { revalidateEquipaments } from 'server/reavlidation'
+import { revalidateGeneral } from 'server/reavlidation'
 import Link from 'next/link'
 import { ICreatEquipament, IEquipaments } from 'types/equipaments'
 
@@ -108,7 +108,10 @@ export default function NewEquipamentForm({
       type: 'success'
     })
 
-    await revalidateEquipaments(`/equipamentos/${equipament?.id}`)
+    await revalidateGeneral({
+      path: '/equipamentos',
+      redirectTo: `/equipamentos/${equipament?.id}`
+    })
   })
 
   const validateForm = (values: ICreatEquipament) => {

@@ -39,6 +39,7 @@ export default function LoginForm({ handleSubmit }: ILoginProp) {
 
   const onSubmit = methods.handleSubmit(async (values) => {
     setIsLoading(true)
+
     const user = await handleSubmit(values)
 
     if (user.error || !user.data) {

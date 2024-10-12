@@ -13,6 +13,20 @@
   }
 }
 
+@media (max-width: 415px) {
+  .main-equipaments-page {
+    .equipaments-header {
+      h1 {
+        font-size: 18px;
+      }
+
+      .button-new-equipament {
+        width: rem(150);
+      }
+    }
+  }
+}
+
 @media (min-width: $breakpoint-small) {
   .main-equipaments-page {
     padding: rem(40) 0;
