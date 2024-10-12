@@ -1,0 +1,113 @@
+.users-section {
+  .users-wrapper {
+    display: grid;
+    grid-template-columns: unset;
+    grid-template-rows: 1fr;
+    gap: rem(18);
+  }
+
+  .user-item {
+    padding: rem(24) rem(16);
+    padding-bottom: rem(16);
+    background-color: $color-white;
+    border-radius: 8px;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+    position: relative;
+    height: fit-content;
+
+    display: grid;
+    place-content: unset;
+    grid-template-columns: unset;
+    grid-template-rows: 1fr;
+    width: 100%;
+    gap: 8px;
+
+    &:nth-child(even) {
+      background-color: $color-text;
+      color: $color-white;
+
+      p,
+      a {
+        color: $color-white;
+      }
+    }
+
+    span {
+      font-weight: 700;
+    }
+  }
+
+  .user-table-header {
+    display: none;
+  }
+
+  .user-info {
+    display: flex;
+    gap: 6px;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+
+    &:last-child {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  .action-button {
+    background-color: $color-primary;
+    padding: 6px;
+    border-radius: 4px;
+  }
+}
+
+.empty-users {
+  padding: rem(80) 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .not-found-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    h3 {
+      font-size: 26px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 32px;
+    }
+  }
+}
+
+@media (min-width: $breakpoint-small) {
+  .users-section {
+    .user-info {
+      span {
+        display: none;
+      }
+    }
+
+    .user-table-header {
+      display: grid;
+      margin-bottom: rem(18);
+      padding: rem(24) rem(16);
+      background-color: $color-text;
+      color: $color-background;
+      font-weight: 700;
+      border-radius: 8px 8px 0 0;
+      box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-item,
+    .user-table-header {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-rows: unset;
+      place-content: center;
+    }
+  }
+}

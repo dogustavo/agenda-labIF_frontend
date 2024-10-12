@@ -1,0 +1,51 @@
+.schedule-form-container {
+  .schedule-form {
+    display: grid;
+    grid-template-columns: unset;
+    grid-template-rows: auto 1fr;
+    gap: 2rem;
+  }
+
+  .form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: rem(40);
+  }
+
+  .button-wrapper {
+    display: flex;
+    align-items: center;
+    align-self: flex-end;
+    gap: rem(20);
+    width: 100%;
+  }
+
+  .inputs-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: rem(20);
+  }
+
+  .pill-check-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (min-width: $breakpoint-large) {
+  .schedule-form-container {
+    .schedule-form {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: unset;
+    }
+
+    .button-wrapper {
+      width: 40%;
+    }
+
+    .pill-check-wrapper {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+}

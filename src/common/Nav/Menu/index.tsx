@@ -38,6 +38,12 @@ const menuItems = [
     slug: 'equipamentos',
     link: '/equipamentos',
     role: [USER_ROLES.USER_ADMIN]
+  },
+  {
+    label: 'Usuários',
+    slug: 'usuarios',
+    link: '/usuarios',
+    role: [USER_ROLES.USER_ADMIN]
   }
 ]
 

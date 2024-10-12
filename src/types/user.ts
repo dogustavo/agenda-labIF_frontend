@@ -17,7 +17,6 @@ export interface IUserResponse {
   id: number
   name: string
   email: string
-  password: string
   role: 'user' | 'approver' | 'admin'
   userType: string
   token: string
@@ -25,6 +24,11 @@ export interface IUserResponse {
 
 export interface IUserTypeResponse {
   data: IUserType[]
+  meta: IMeta
+}
+
+export interface IUsersResponse {
+  data: IUserResponse[]
   meta: IMeta
 }
 
