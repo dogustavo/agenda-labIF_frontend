@@ -4,6 +4,8 @@ export interface IAuth {
   email: string
   role: 'approver' | 'user' | 'admin'
   token: string
+  isBlocked: boolean
+  isReseted: boolean
 }
 
 export interface IAuthForm {

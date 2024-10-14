@@ -40,7 +40,13 @@ export default async function Login() {
     }
 
     await setCookie('user-auth', res.data.token)
-    await setCookie('user-role', res.data.role)
+    await setCookie(
+      'user-role',
+      JSON.stringify({
+        role: res.data.role,
+        isReseted: res.data.isReseted
+      })
+    )
     return { data: res.data }
   }
 

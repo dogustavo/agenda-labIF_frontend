@@ -9,6 +9,12 @@ const adminRoutes = ['/equipamentos', '/usuarios']
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const userCookie = request.cookies.get('user-role')?.value
+  const parsedCookie = userCookie ? JSON.parse(userCookie) : ''
+
+  if (parsedCookie && parsedCookie.isReseted) {
+    return NextResponse.redirect(new URL('/reset-senha', request.url))
+  }
 
   const isAdminRoute = adminRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
@@ -25,5 +31,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/equipamentos/:path*', '/login', '/usuarios/:path*']
+  matcher: ['/equipamentos/:path*', '/login', '/usuarios/:path*', '/']
 }

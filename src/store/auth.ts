@@ -2,31 +2,32 @@ import { create } from 'zustand'
 
 import { persist } from 'zustand/middleware'
 
-import { AuthProps, AuthStore } from 'types/auth'
+import { AuthProps, AuthStore, IAuth } from 'types/auth'
+
+interface AuthState extends IAuth {
+  isAuth: boolean
+}
+
+const initialState: AuthState = {
+  token: '',
+  name: '',
+  email: '',
+  id: 0,
+  isAuth: false,
+  role: 'user',
+  isBlocked: false,
+  isReseted: false
+}
 
 export const useAuth = create<AuthStore>()(
   persist(
     (set) => ({
-      token: '',
-      name: '',
-      email: '',
-      id: 0,
-      isAuth: false,
-      role: 'user',
+      ...initialState,
       signIn: (auth: AuthProps) =>
         set(() => {
           return auth
         }),
-      signOut: () =>
-        set(() => {
-          return {
-            isAuth: false,
-            token: '',
-            username: '',
-            email: '',
-            permissions: []
-          }
-        })
+      signOut: () => set(() => initialState)
     }),
     {
       name: 'auth-storage'

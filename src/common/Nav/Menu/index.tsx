@@ -132,6 +132,7 @@ export default function Menu() {
     await removeCookie('user-auth')
     await removeCookie('user-role')
     signOut()
+    document.body.style.overflowY = 'auto'
     router.push('/login')
   }
 

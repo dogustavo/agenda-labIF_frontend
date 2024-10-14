@@ -7,6 +7,7 @@ import { IUserResponse } from 'types/user'
 import Link from 'next/link'
 
 import BlockUser from '../BlockUser'
+import ResetUserPwd from '../ResetUserPwd'
 
 export default function UsersCard({
   users
@@ -62,6 +63,7 @@ export default function UsersCard({
               <p>{user.role}</p>
             </div>
             <div className={styled['user-info']}>
+              <ResetUserPwd userId={user.id} />
               <BlockUser
                 isBlocked={user.isBlocked}
                 userId={user.id}

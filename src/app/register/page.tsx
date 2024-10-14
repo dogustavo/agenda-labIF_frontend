@@ -54,7 +54,13 @@ export default async function Register() {
     }
 
     await setCookie('user-auth', register.data.token)
-    await setCookie('user-role', register.data.role)
+    await setCookie(
+      'user-role',
+      JSON.stringify({
+        role: register.data.role,
+        isReseted: false
+      })
+    )
     return { data: register.data }
   }
 

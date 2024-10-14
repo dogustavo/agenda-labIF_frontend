@@ -29,7 +29,6 @@ const equipamentSchema = z
     const availableTo = convertHour(val.availableTo)
 
     if (availableFrom > availableTo) {
-      console.log('entrou')
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'O horário final não pode ser menor que inicial.',

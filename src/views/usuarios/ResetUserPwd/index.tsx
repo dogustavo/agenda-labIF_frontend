@@ -4,19 +4,13 @@ import classNames from 'classnames'
 import styled from './styles.module.scss'
 import Image from 'next/image'
 import { useMutation } from '@tanstack/react-query'
-import { blockUser } from 'services'
+import { resetUserPwd } from 'services'
 import { revalidateGeneral } from 'server/reavlidation'
 import { ToastStore, useToast } from 'store/notification'
 import { useState } from 'react'
 import { Button, Modal, Toast } from 'common'
 
-export default function BlockUser({
-  isBlocked = false,
-  userId
-}: {
-  userId: number
-  isBlocked?: boolean
-}) {
+export default function ResetUserPwd({ userId }: { userId: number }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { setShowToast, type } = useToast(
@@ -25,10 +19,10 @@ export default function BlockUser({
   const [alertMessage, setAlertMessage] = useState('')
 
   const { mutate, isPending } = useMutation({
-    mutationFn: blockUser,
+    mutationFn: resetUserPwd,
     onSuccess: async (ctx) => {
       if (ctx.error) {
-        setAlertMessage('Não foi possível bloquear usuário')
+        setAlertMessage('Não foi possível resetar senha de usuário')
         setShowToast({
           isOpen: true,
           type: 'error'
@@ -37,7 +31,8 @@ export default function BlockUser({
         return
       }
 
-      setAlertMessage('Usuário alterado com sucesso')
+      setAlertMessage('Senha do usuário resetada com sucesso')
+
       setShowToast({
         isOpen: true,
         type: 'success'
@@ -53,14 +48,12 @@ export default function BlockUser({
   return (
     <>
       <button
-        className={classNames(styled['action-button'], {
-          [styled['is-blocked']]: !isBlocked
-        })}
+        className={classNames(styled['action-button'])}
         onClick={() => setIsModalOpen(true)}
       >
         <Image
-          src={!isBlocked ? '/svg/lock.svg' : '/svg/lock_open.svg'}
-          alt="Icone de cadeado no centro do botão editar usero"
+          src="/svg/key.svg"
+          alt="Icone de chave no centro do botão reset de senha"
           width={22}
           height={22}
         />
@@ -73,9 +66,8 @@ export default function BlockUser({
         />
         <Modal.Body>
           <p>
-            Você está prestes a
-            {isBlocked ? ' desbloquear ' : ' bloquear '}
-            este usuário. Deseja continuar?
+            Você está prestes a resetar a senha este usuário. Deseja
+            continuar?
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -85,7 +77,6 @@ export default function BlockUser({
           <Button
             onClick={() =>
               mutate({
-                action: isBlocked ? 'unblock' : 'block',
                 id: userId
               })
             }

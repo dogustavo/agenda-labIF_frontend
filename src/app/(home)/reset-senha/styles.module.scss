@@ -1,0 +1,9 @@
+.main-reset {
+  padding: rem(30) 0;
+}
+
+@media (min-width: $breakpoint-small) {
+  .main-reset {
+    padding: rem(40) 0;
+  }
+}

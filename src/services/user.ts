@@ -1,5 +1,9 @@
 import { fetcher } from 'services'
-import { IUserRegister, IUserRegisterResponse } from 'types/user'
+import {
+  IUserRegister,
+  IUserRegisterResponse,
+  IUserResponse
+} from 'types/user'
 
 import { IUsersResponse, IUserTypeResponse } from 'types/user'
 import { FetchError } from 'utils/fetcher'
@@ -147,6 +151,55 @@ export async function blockUser({
     })
 
     return { success: true }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { error }
+    }
+
+    return {
+      error: new FetchError('Unexpected error', 500, new Response())
+    }
+  }
+}
+
+export async function resetUserPwd({ id }: { id: number }): Promise<{
+  success?: boolean
+  error?: FetchError
+}> {
+  try {
+    await fetcher(`/users/pwd-reset/${id}`, {
+      method: 'PATCH'
+    })
+
+    return { success: true }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { error }
+    }
+
+    return {
+      error: new FetchError('Unexpected error', 500, new Response())
+    }
+  }
+}
+
+export async function changeUserPwd({
+  id,
+  password
+}: {
+  id: number
+  password: string
+}): Promise<{
+  data?: IUserResponse
+  error?: FetchError
+}> {
+  try {
+    const res = await fetcher<IUserResponse>(`/users/new-pwd/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ password })
+    })
+
+    return { data: res }
   } catch (error) {
     if (error instanceof FetchError) {
       return { error }

@@ -24,6 +24,7 @@ export interface IUserResponse {
   role: 'user' | 'approver' | 'admin'
   userType: string
   isBlocked?: boolean
+  isReseted?: boolean
   token: string
 }
 
