@@ -11,6 +11,10 @@ import { revalidateGeneral } from 'server/reavlidation'
 import Link from 'next/link'
 import { ICreatEquipament, IEquipaments } from 'types/equipaments'
 
+import schema from '../schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+
 const timesOptions = [
   { label: '01:00', value: '01:00:00' },
   { label: '02:00', value: '02:00:00' },
@@ -42,12 +46,13 @@ export default function EditEquipamentForm({
 }: {
   equipament?: IEquipaments
 }) {
-  const methods = useForm<ICreatEquipament>()
+  const methods = useForm<ICreatEquipament>({
+    resolver: zodResolver(schema)
+  })
   const { setShowToast, type } = useToast(
     (state: ToastStore) => state
   )
 
-  const [isLoading, setIsLoading] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
 
   useEffect(() => {
@@ -63,17 +68,32 @@ export default function EditEquipamentForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const convertHour = (time: string): number => {
-    const [hours] = time.split(':').map(Number)
+  const { mutate, isPending } = useMutation({
+    mutationFn: editEquipament,
+    onSuccess: async (ctx) => {
+      if (ctx.error) {
+        setAlertMessage('Não foi possível editar equipamento')
+        setShowToast({
+          isOpen: true,
+          type: 'error'
+        })
 
-    return hours
-  }
+        return
+      }
+
+      setAlertMessage('Equipamento criado com sucesso')
+      setShowToast({
+        isOpen: true,
+        type: 'success'
+      })
+      await revalidateGeneral({
+        path: '/equipamentos',
+        redirectTo: `/equipamentos/${equipament?.id}`
+      })
+    }
+  })
 
   const handleSubmit = methods.handleSubmit(async (values) => {
-    if (!validateForm(values)) return
-
-    setIsLoading(true)
-
     const request = {
       id: equipament?.id as number,
       params: {
@@ -81,84 +101,8 @@ export default function EditEquipamentForm({
       }
     }
 
-    const { error, data } = await editEquipament(request)
-
-    setIsLoading(false)
-
-    if (!!error) {
-      setAlertMessage(error.message)
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      return
-    }
-    if (!data) {
-      setAlertMessage('Não foi possível editar equipamento')
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      return
-    }
-
-    setAlertMessage('Equipamento editado com sucesso')
-    setShowToast({
-      isOpen: true,
-      type: 'success'
-    })
-
-    await revalidateGeneral({
-      path: '/equipamentos',
-      redirectTo: `/equipamentos/${equipament?.id}`
-    })
+    await mutate(request)
   })
-
-  const validateForm = (values: ICreatEquipament) => {
-    if (!equipament?.id) {
-      return false
-    }
-    if (!values.equipamentName) {
-      methods.setError('equipamentName', {
-        message: 'Nome do equipamento é obrigatório'
-      })
-      return false
-    }
-
-    if (!values.availableFrom || !values.availableTo) {
-      methods.setError(
-        !values.availableFrom ? 'availableFrom' : 'availableTo',
-        { message: 'Selecione o as horas disponíveis' }
-      )
-      return false
-    }
-
-    const availableFrom = convertHour(values.availableFrom)
-    const availableTo = convertHour(values.availableTo)
-
-    if (availableFrom > availableTo) {
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      setAlertMessage(
-        'O horário inicial não pode ser maior que o final'
-      )
-      return false
-    }
-
-    if (availableFrom === availableTo) {
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      setAlertMessage(
-        'É necessário ter ao menos 1h de espaço para agendamento'
-      )
-      return false
-    }
-    return true
-  }
 
   return (
     <div className={styled['schedule-form-container']}>
@@ -190,7 +134,7 @@ export default function EditEquipamentForm({
               <Link href="/equipamentos">Cancelar</Link>
             </Button>
             <Button onClick={handleSubmit} type="submit">
-              {isLoading ? 'Enviando...' : 'Enviar'}
+              {isPending ? 'Enviando...' : 'Enviar'}
             </Button>
           </div>
         </form>

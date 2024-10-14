@@ -2,13 +2,16 @@
 
 import { Select, Button, Toast, Input } from 'common'
 import { FormProvider, useForm } from 'react-hook-form'
-
+import { useMutation } from '@tanstack/react-query'
 import styled from './styles.module.scss'
 import { useState } from 'react'
 import { createEquipament } from 'services'
 import { ToastStore, useToast } from 'store/notification'
 import { revalidateGeneral } from 'server/reavlidation'
 import Link from 'next/link'
+
+import schema from '../schema'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const timesOptions = [
   { label: '01:00', value: '01:00:00' },
@@ -43,103 +46,44 @@ interface IFormValues {
 }
 
 export default function NewEquipamentForm() {
-  const methods = useForm<IFormValues>()
+  const methods = useForm<IFormValues>({
+    resolver: zodResolver(schema)
+  })
   const { setShowToast, type } = useToast(
     (state: ToastStore) => state
   )
 
-  const [isLoading, setIsLoading] = useState(false)
-
   const [alertMessage, setAlertMessage] = useState('')
 
-  const convertHour = (time: string): number => {
-    // eslint-disable-next-line prefer-const
-    const [hours] = time.split(':').map(Number)
+  const { mutate, isPending } = useMutation({
+    mutationFn: createEquipament,
+    onSuccess: async (ctx) => {
+      if (ctx.error) {
+        setAlertMessage('Não foi possível criar novo equipamento')
+        setShowToast({
+          isOpen: true,
+          type: 'error'
+        })
 
-    return hours
-  }
+        return
+      }
 
-  const handleSubmit = methods.handleSubmit(async (values) => {
-    if (!validateForm(values)) return
-
-    setIsLoading(true)
-
-    const { error, data } = await createEquipament(values)
-
-    setIsLoading(false)
-
-    if (!!error) {
-      setAlertMessage(error.message)
+      setAlertMessage('Equipamento criado com sucesso')
       setShowToast({
         isOpen: true,
-        type: 'error'
+        type: 'success'
       })
-      return
-    }
-    if (!data) {
-      setAlertMessage('Não foi possível criar novo equipamento')
-      setShowToast({
-        isOpen: true,
-        type: 'error'
+      methods.reset()
+      await revalidateGeneral({
+        path: '/equipamentos',
+        redirectTo: `/equipamentos/novo`
       })
-      return
     }
-
-    setAlertMessage('Equipamento criado com sucesso')
-    setShowToast({
-      isOpen: true,
-      type: 'success'
-    })
-
-    methods.reset()
-    await revalidateGeneral({
-      path: '/equipamentos',
-      redirectTo: `/equipamentos/novo`
-    })
   })
 
-  const validateForm = (values: IFormValues) => {
-    if (!values.equipamentName) {
-      methods.setError('equipamentName', {
-        message: 'Nome do equipamento é obrigatório'
-      })
-      return false
-    }
-
-    if (!values.availableFrom || !values.availableTo) {
-      methods.setError(
-        !values.availableFrom ? 'availableFrom' : 'availableTo',
-        { message: 'Selecione o as horas disponíveis' }
-      )
-      return false
-    }
-
-    const availableFrom = convertHour(values.availableFrom)
-    const availableTo = convertHour(values.availableTo)
-
-    if (availableFrom > availableTo) {
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      setAlertMessage(
-        'O horário inicial não pode ser maior que o final'
-      )
-      return false
-    }
-
-    if (availableFrom === availableTo) {
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      setAlertMessage(
-        'É necessário ter ao menos 1h de espaço para agendamento'
-      )
-      return false
-    }
-    return true
-  }
+  const handleSubmit = methods.handleSubmit(async (values) => {
+    await mutate(values)
+  })
 
   return (
     <div className={styled['schedule-form-container']}>
@@ -163,7 +107,7 @@ export default function NewEquipamentForm() {
               <Link href="/equipamentos">Cancelar</Link>
             </Button>
             <Button onClick={handleSubmit} type="submit">
-              {isLoading ? 'Enviando...' : 'Enviar'}
+              {isPending ? 'Enviando...' : 'Enviar'}
             </Button>
           </div>
         </form>
