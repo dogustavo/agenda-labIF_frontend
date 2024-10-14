@@ -27,7 +27,7 @@ export default async function Login() {
 
     const res = await authLogin({ login: values })
 
-    if (res.error?.statusCode === 404) {
+    if (res.error) {
       return {
         error: res.error.message
       }

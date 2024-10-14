@@ -1,0 +1,9 @@
+.action-button {
+  background-color: $color-blue;
+  padding: 6px;
+  border-radius: 4px;
+
+  &.is-blocked {
+    background-color: $color-slate-gray;
+  }
+}

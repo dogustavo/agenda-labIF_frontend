@@ -38,10 +38,15 @@
   justify-content: space-between;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: $color-text;
 }
 
 .modal-body {
   padding: 1rem 0;
+
+  > p {
+    color: $color-text;
+  }
 }
 
 .modal-footer {

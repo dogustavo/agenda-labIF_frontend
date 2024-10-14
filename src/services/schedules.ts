@@ -61,7 +61,7 @@ export async function evaluateSchedule({
       return { success: false }
     }
 
-    return { success: true }
+    return { success: false }
   }
 }
 

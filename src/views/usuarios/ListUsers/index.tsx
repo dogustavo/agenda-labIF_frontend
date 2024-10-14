@@ -6,6 +6,8 @@ import Image from 'next/image'
 import { IUserResponse } from 'types/user'
 import Link from 'next/link'
 
+import BlockUser from '../BlockUser'
+
 export default function UsersCard({
   users
 }: {
@@ -60,13 +62,17 @@ export default function UsersCard({
               <p>{user.role}</p>
             </div>
             <div className={styled['user-info']}>
+              <BlockUser
+                isBlocked={user.isBlocked}
+                userId={user.id}
+              />
               <Link
                 className={styled['action-button']}
                 href={`/usuarios/${user.id}`}
               >
                 <Image
                   src="/svg/edit.svg"
-                  alt="Icone de lapes no centro do botão editar usero"
+                  alt="Icone de lapes no centro do botão editar useruário"
                   width={22}
                   height={22}
                 />

@@ -127,3 +127,33 @@ export async function editUser({
     }
   }
 }
+
+export async function blockUser({
+  action,
+  id
+}: {
+  action: string
+  id: number
+}): Promise<{
+  success?: boolean
+  error?: FetchError
+}> {
+  try {
+    await fetcher(`/users/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        action
+      })
+    })
+
+    return { success: true }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { error }
+    }
+
+    return {
+      error: new FetchError('Unexpected error', 500, new Response())
+    }
+  }
+}

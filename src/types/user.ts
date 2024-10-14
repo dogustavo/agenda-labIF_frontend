@@ -23,6 +23,7 @@ export interface IUserResponse {
   email: string
   role: 'user' | 'approver' | 'admin'
   userType: string
+  isBlocked?: boolean
   token: string
 }
 
