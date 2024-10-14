@@ -1,12 +1,10 @@
-import { Container } from 'common'
+import { Container, PageFormHeader } from 'common'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import styled from './styles.module.scss'
-import Link from 'next/link'
-import Image from 'next/image'
 
-import Form from '../components/Novo/Form'
+import { NewEquipamentForm } from 'views/equipamentos'
 
 export default async function NewEquipament() {
   const token = cookies().get('user-auth')?.value
@@ -18,24 +16,9 @@ export default async function NewEquipament() {
   return (
     <section className={styled['main-schedules-new']}>
       <Container>
-        <div className={styled['schedules-header']}>
-          <Link
-            href="/equipamentos"
-            className={styled['button-schedule']}
-          >
-            <Image
-              src="/svg/arrow_right.svg"
-              width={16}
-              height={16}
-              alt="icone de voltar"
-            />
-            <span>Voltar</span>
-          </Link>
+        <PageFormHeader title="Novo equipamento" />
 
-          <h1>Criar novo equipamento</h1>
-        </div>
-
-        <Form />
+        <NewEquipamentForm />
       </Container>
     </section>
   )

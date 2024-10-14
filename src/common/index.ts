@@ -8,6 +8,8 @@ import ScheduleCard from './Schedule'
 import Pagination from './Pagination'
 import { DatePickerRange, DatePicker } from './DatePicker'
 import PillCheck from './PillCheck'
+import PageListHeader from './PageListHeader'
+import PageFormHeader from './PageFormHeader'
 
 import { Modal } from './Modal'
 import { Toast } from './Toast'
@@ -25,5 +27,7 @@ export {
   Pagination,
   DatePickerRange,
   DatePicker,
-  PillCheck
+  PillCheck,
+  PageListHeader,
+  PageFormHeader
 }

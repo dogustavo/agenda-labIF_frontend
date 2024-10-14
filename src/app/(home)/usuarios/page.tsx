@@ -1,12 +1,10 @@
-import { Button, Container, Pagination } from 'common'
+import { Container, Pagination, PageListHeader } from 'common'
 import { redirect } from 'next/navigation'
 import { getAllUsers } from 'services'
 
 import styled from './styles.module.scss'
-import Link from 'next/link'
 
-import UsersCard from './components/List/Users'
-import Filter from './components/List/Filter'
+import { UsersFilter, UsersList } from 'views/usuarios'
 
 interface IPage {
   searchParams: { [key: string]: any | null | undefined }
@@ -27,21 +25,13 @@ export default async function UsersPage({ searchParams }: IPage) {
   return (
     <section className={styled['main-equipaments-page']}>
       <Container>
-        <div className={styled['equipaments-header']}>
-          <h1>Usuários</h1>
+        <PageListHeader title="Usuários" path="/equipamentos/novo">
+          <span>Novo Usuário</span>
+        </PageListHeader>
 
-          <div className={styled['button-new-equipament']}>
-            <Button asChild>
-              <Link href="/equipamentos/novo">
-                <span>Novo Usuário</span>
-              </Link>
-            </Button>
-          </div>
-        </div>
+        <UsersFilter searchParams={searchParams} />
 
-        <Filter searchParams={searchParams} />
-
-        <UsersCard users={users?.data} />
+        <UsersList users={users?.data} />
 
         <Pagination
           path="usuarios"

@@ -1,0 +1,22 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: rem(24);
+
+  .page-button-header {
+    width: rem(205);
+  }
+}
+
+@media (max-width: 415px) {
+  .page-header {
+    h1 {
+      font-size: 18px;
+    }
+
+    .page-button-header {
+      width: rem(150);
+    }
+  }
+}

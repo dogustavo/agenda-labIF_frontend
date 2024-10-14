@@ -1,15 +1,5 @@
 .main-schedules-page {
   padding: rem(30) 0;
-
-  .schedules-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: rem(24);
-  }
-  .button-schedule {
-    width: rem(205);
-  }
 }
 
 @media (min-width: $breakpoint-small) {

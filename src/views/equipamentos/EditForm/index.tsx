@@ -37,7 +37,7 @@ const timesOptions = [
   { label: '23:00', value: '23:00:00' }
 ]
 
-export default function NewEquipamentForm({
+export default function EditEquipamentForm({
   equipament
 }: {
   equipament?: IEquipaments
@@ -94,7 +94,7 @@ export default function NewEquipamentForm({
       return
     }
     if (!data) {
-      setAlertMessage('Não foi possível criar novo equipamento')
+      setAlertMessage('Não foi possível editar equipamento')
       setShowToast({
         isOpen: true,
         type: 'error'
@@ -102,7 +102,7 @@ export default function NewEquipamentForm({
       return
     }
 
-    setAlertMessage('Equipamento criado com sucesso')
+    setAlertMessage('Equipamento editado com sucesso')
     setShowToast({
       isOpen: true,
       type: 'success'

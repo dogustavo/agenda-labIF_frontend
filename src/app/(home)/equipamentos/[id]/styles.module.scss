@@ -1,23 +1,5 @@
 .main-schedules-new {
   padding: rem(30) 0;
-
-  .schedules-header {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: rem(24);
-  }
-  .button-schedule {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    img {
-      transform: rotate(180deg);
-      margin-right: 4px;
-    }
-  }
 }
 
 @media (min-width: $breakpoint-small) {
