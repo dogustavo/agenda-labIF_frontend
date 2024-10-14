@@ -25,7 +25,7 @@ export default async function UsersPage({ searchParams }: IPage) {
   return (
     <section className={styled['main-equipaments-page']}>
       <Container>
-        <PageListHeader title="Usuários" path="/equipamentos/novo">
+        <PageListHeader title="Usuários" path="/usuarios/novo">
           <span>Novo Usuário</span>
         </PageListHeader>
 

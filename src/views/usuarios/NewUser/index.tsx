@@ -1,21 +1,21 @@
 'use client'
 
-import { Button, Toast, Input } from 'common'
+import { Button, Toast, Input, Select } from 'common'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import styled from './styles.module.scss'
 import { useState } from 'react'
-import { createEquipament } from 'services'
+import { createUser, getUsersTypes } from 'services'
 import { ToastStore, useToast } from 'store/notification'
 import { revalidateGeneral } from 'server/reavlidation'
 import Link from 'next/link'
 
-import userSchema from './schema'
+import userSchema from '../schema'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { IUserRegister } from 'types/user'
 
-interface IFormValues {
-  equipamentName: string
-  availableFrom: string
-  availableTo: string
+interface IFormValues extends IUserRegister {
+  password_check: string
 }
 
 export default function NewUserForm() {
@@ -26,46 +26,62 @@ export default function NewUserForm() {
     (state: ToastStore) => state
   )
 
-  const [isLoading, setIsLoading] = useState(false)
-
   const [alertMessage, setAlertMessage] = useState('')
 
+  const { data: userTypes = [], isFetching } = useQuery({
+    queryKey: ['user-types'],
+    queryFn: getUsersTypes,
+    refetchOnWindowFocus: false,
+    select: ({ data: result, error }) => {
+      if (error) {
+        return [{ label: 'Outros', value: 'Outros' }]
+      }
+
+      return result?.data.map((ele) => {
+        return {
+          label: ele.description,
+          value: ele.description
+        }
+      })
+    }
+  })
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: createUser,
+    onSuccess: async (ctx) => {
+      if (ctx.error) {
+        setAlertMessage('Não foi possível criar novo usuário')
+        setShowToast({
+          isOpen: true,
+          type: 'error'
+        })
+
+        return
+      }
+
+      setAlertMessage('Usuário criado com sucesso')
+      setShowToast({
+        isOpen: true,
+        type: 'success'
+      })
+      methods.reset()
+      await revalidateGeneral({
+        path: '/usuarios',
+        redirectTo: `/usuarios/novo`
+      })
+    }
+  })
+
+  if (isFetching) {
+    return <p>Carregando Informações...</p>
+  }
+
   const handleSubmit = methods.handleSubmit(async (values) => {
-    // if (!validateForm(values)) return
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password_check, ...rest } = values
 
-    setIsLoading(true)
-
-    const { error, data } = await createEquipament(values)
-
-    setIsLoading(false)
-
-    if (!!error) {
-      setAlertMessage(error.message)
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      return
-    }
-    if (!data) {
-      setAlertMessage('Não foi possível criar novo equipamento')
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      return
-    }
-
-    setAlertMessage('Equipamento criado com sucesso')
-    setShowToast({
-      isOpen: true,
-      type: 'success'
-    })
-
-    methods.reset()
-    await revalidateGeneral({
-      path: '/usuarios',
-      redirectTo: `/usuarios/novo`
+    await mutate({
+      data: { ...rest }
     })
   })
 
@@ -77,12 +93,41 @@ export default function NewUserForm() {
             <div className={styled['inputs-wrapper']}>
               <Input
                 label="Nome"
-                name="equipamentName"
+                name="name"
                 placeholder="Nome"
                 type="text"
               />
-              {/* <Select name="availableFrom" options={timesOptions} />
-              <Select name="availableTo" options={timesOptions} /> */}
+              <Input
+                label="E-mail"
+                name="email"
+                placeholder="E-mail"
+                type="email"
+              />
+              <Select
+                name="userType"
+                placeholder="Selecione tipo do usuário"
+                options={userTypes}
+              />
+              <Select
+                name="role"
+                placeholder="Seleciono papel do usuário"
+                options={[
+                  { label: 'Admin', value: 'admin' },
+                  { label: 'Aprovador', value: 'approver' }
+                ]}
+              />
+              <Input
+                name="password"
+                label="Senha"
+                placeholder="Senha"
+                type="password"
+              />
+              <Input
+                name="password_check"
+                label="Confirme sua senha"
+                placeholder="Confirme sua senha"
+                type="password"
+              />
             </div>
           </div>
 
@@ -91,7 +136,7 @@ export default function NewUserForm() {
               <Link href="/usuarios">Cancelar</Link>
             </Button>
             <Button onClick={handleSubmit} type="submit">
-              {isLoading ? 'Enviando...' : 'Enviar'}
+              {isPending ? 'Enviando...' : 'Enviar'}
             </Button>
           </div>
         </form>

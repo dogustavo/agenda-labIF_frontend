@@ -5,12 +5,16 @@ export interface IUserType {
   createdAt: Date
 }
 
-export interface IUserRegister {
+export interface IUserRegisterResponse {
   name: string
   email: string
-  password: string
   role: 'user' | 'approver' | 'admin'
   userType: string
+  id: number
+}
+
+export interface IUserRegister extends IUserRegisterResponse {
+  password: string
 }
 
 export interface IUserResponse {

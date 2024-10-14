@@ -23,6 +23,11 @@ const userSchema = z
     password: z.string().min(6, {
       message: 'A senha deve ter pelo menos 6 caracteres.'
     }),
+    role: z
+      .string({
+        required_error: 'Campo papel do usuário é obrigatório'
+      })
+      .min(1, { message: 'Selecione um tipo de usuário.' }),
     password_check: z.string().min(6, {
       message:
         'A confirmação da senha deve ter pelo menos 4 caracteres.'
