@@ -1,5 +1,4 @@
 import { Container, PageFormHeader } from 'common'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import styled from './styles.module.scss'
@@ -12,12 +11,7 @@ export default async function EditEquipament({
 }: {
   params: { id: string }
 }) {
-  const token = cookies().get('user-auth')?.value
   const { error, data: equipament } = await getEquipament(params.id)
-
-  if (!token) {
-    redirect('/login')
-  }
 
   if (error?.statusCode === 401) {
     return redirect('/login')

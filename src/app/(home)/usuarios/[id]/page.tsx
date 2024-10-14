@@ -1,6 +1,4 @@
 import { Container, PageFormHeader } from 'common'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 
 import styled from './styles.module.scss'
 
@@ -11,13 +9,7 @@ export default async function EditEquipament({
 }: {
   params: { id: string }
 }) {
-  const token = cookies().get('user-auth')?.value
-
   console.log('user', params)
-
-  if (!token) {
-    redirect('/login')
-  }
 
   return (
     <section className={styled['main-schedules-new']}>

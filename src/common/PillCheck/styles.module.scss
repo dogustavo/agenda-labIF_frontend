@@ -1,6 +1,13 @@
 .checkbox {
   box-sizing: border-box;
 
+  &.has-error {
+    label {
+      border-color: #b61b1b;
+      color: #b61b1b;
+    }
+  }
+
   label {
     cursor: pointer;
     display: block;

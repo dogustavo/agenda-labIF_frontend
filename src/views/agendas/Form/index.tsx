@@ -1,17 +1,23 @@
 'use client'
-
-import { Select, DatePicker, Button, Toast, PillCheck } from 'common'
-import { FormProvider, useForm } from 'react-hook-form'
-
-import styled from './styles.module.scss'
-import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
-import { getEquipamentDisponibility } from 'services'
+
+import Link from 'next/link'
+
+import { FormProvider, useForm } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
+import { format } from 'date-fns'
+import { Select, DatePicker, Button, Toast, PillCheck } from 'common'
+
+import { revalidateGeneral } from 'server/reavlidation'
 import { ToastStore, useToast } from 'store/notification'
 import { addOneHour, areTimesConsecutive } from 'utils/time'
-import { createSchedule } from 'services/schedules'
-import { revalidateGeneral } from 'server/reavlidation'
-import Link from 'next/link'
+
+import { getEquipamentDisponibility, createSchedule } from 'services'
+
+import styled from './styles.module.scss'
+
+import schema from './schema'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 interface IFormProp {
   equipamentsOptions: IEquipaments[] | []
@@ -31,89 +37,79 @@ interface IFormValues {
 export default function NewScheduleForm({
   equipamentsOptions
 }: IFormProp) {
-  const methods = useForm<IFormValues>()
+  const methods = useForm<IFormValues>({
+    resolver: zodResolver(schema)
+  })
   const { setShowToast, type } = useToast(
     (state: ToastStore) => state
   )
 
-  const [dispLoading, setDispLoading] = useState(false)
-  const [scheduleLoading, setScheduleLoadiing] = useState(false)
-
   const [alertMessage, setAlertMessage] = useState('')
-  const [equipamentDisponibility, setEquipamentDisponibility] =
-    useState<string[]>([])
 
   const scheduleDate = methods.watch('scheduleDate')
   const equipamentId = methods.watch('equipamentId')
 
-  useEffect(() => {
-    setEquipamentDisponibility([])
-  }, [setEquipamentDisponibility, scheduleDate, equipamentId])
+  const {
+    mutate,
+    isPending: diponibilityLoding,
+    data: disponibilityData,
+    reset
+  } = useMutation({
+    mutationFn: getEquipamentDisponibility,
+    onSuccess: async (ctx) => {
+      const { error, data } = ctx
 
-  const handleSubmit = methods.handleSubmit(async (values) => {
-    if (!validateForm(values)) return
-
-    setScheduleLoadiing(true)
-
-    const schedule = {
-      equipamentId: +values.equipamentId,
-      scheduleDate: format(values.scheduleDate, 'yyyy-MM-dd'),
-      timeInit: values.time[0],
-      timeEnd: addOneHour(values.time[values.time.length - 1])
+      if (error) {
+        setAlertMessage(error.message)
+        setShowToast({
+          isOpen: true,
+          type: 'error'
+        })
+        return
+      }
+      if (!data?.availableTimes.length) {
+        setAlertMessage('Não foi possível encontra disponibilidade')
+        setShowToast({
+          isOpen: true,
+          type: 'error'
+        })
+        return
+      }
     }
-
-    const { error, data } = await createSchedule(schedule)
-
-    setScheduleLoadiing(false)
-
-    if (!!error) {
-      setAlertMessage(error.message)
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      return
-    }
-    if (!data) {
-      setAlertMessage('Não foi possível criar agenda!')
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      return
-    }
-
-    setAlertMessage('Equipamento criado com sucesso')
-    setShowToast({
-      isOpen: true,
-      type: 'success'
-    })
-
-    setEquipamentDisponibility([])
-    methods.reset()
-
-    await revalidateGeneral({
-      path: '/agendas',
-      redirectTo: '/agendas/novo'
-    })
   })
 
-  const validateForm = (values: IFormValues) => {
-    if (!values.equipamentId || !values.scheduleDate) {
-      methods.setError(
-        !values.equipamentId ? 'equipamentId' : 'scheduleDate',
-        { message: 'Selecione o equipamento e a data' }
-      )
-      return false
-    }
-    if (!values.time) {
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: createSchedule,
+    onSuccess: async (ctx) => {
+      if (ctx.error) {
+        setAlertMessage('Não foi possível criar um agendamento!')
+        setShowToast({
+          isOpen: true,
+          type: 'error'
+        })
+
+        return
+      }
+
+      setAlertMessage('Agendamento realizado com sucesso')
       setShowToast({
         isOpen: true,
-        type: 'error'
+        type: 'success'
       })
-      setAlertMessage('Selecione o horário')
-      return false
+      methods.reset()
+      reset()
+      await revalidateGeneral({
+        path: '/agendas',
+        redirectTo: '/agendas/novo'
+      })
     }
+  })
+
+  useEffect(() => {
+    reset()
+  }, [reset, scheduleDate, equipamentId])
+
+  const handleSubmit = methods.handleSubmit(async (values) => {
     if (!areTimesConsecutive(values.time)) {
       setShowToast({
         isOpen: true,
@@ -124,8 +120,16 @@ export default function NewScheduleForm({
       )
       return false
     }
-    return true
-  }
+
+    const schedule = {
+      equipamentId: +values.equipamentId,
+      scheduleDate: format(values.scheduleDate, 'yyyy-MM-dd'),
+      timeInit: values.time[0],
+      timeEnd: addOneHour(values.time[values.time.length - 1])
+    }
+
+    await mutateAsync(schedule)
+  })
 
   const handleEquipamentDisponibility = async (
     event: React.MouseEvent<HTMLButtonElement>
@@ -147,36 +151,14 @@ export default function NewScheduleForm({
       return
     }
 
-    setDispLoading(true)
+    // setDispLoading(true)
 
     const values = {
       selectedDay: format(date, 'yyyy-MM-dd'),
       equipamentId: equipament
     }
 
-    const { data: disponibility, error } =
-      await getEquipamentDisponibility(values)
-
-    setDispLoading(false)
-
-    if (!!error) {
-      setAlertMessage(error.message)
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      return
-    }
-    if (!disponibility?.availableTimes) {
-      setAlertMessage('Não foi possível encontra disponibilidade')
-      setShowToast({
-        isOpen: true,
-        type: 'error'
-      })
-      return
-    }
-
-    setEquipamentDisponibility(disponibility?.availableTimes)
+    await mutate(values)
   }
 
   return (
@@ -201,7 +183,7 @@ export default function NewScheduleForm({
                   isInverted
                   onClick={handleEquipamentDisponibility}
                 >
-                  {dispLoading
+                  {diponibilityLoding
                     ? 'Carregando...'
                     : ' Buscar Horários Disponíveis'}
                 </Button>
@@ -209,10 +191,12 @@ export default function NewScheduleForm({
             </div>
 
             <div className={styled['pill-check-wrapper']}>
-              {equipamentDisponibility &&
-                equipamentDisponibility.map((dispo, id) => (
-                  <PillCheck name={'time'} label={dispo} key={id} />
-                ))}
+              {disponibilityData?.data &&
+                disponibilityData.data.availableTimes.map(
+                  (dispo, id) => (
+                    <PillCheck name={'time'} label={dispo} key={id} />
+                  )
+                )}
             </div>
           </div>
 
@@ -220,8 +204,12 @@ export default function NewScheduleForm({
             <Button isInverted asChild>
               <Link href="/agendas">Cancelar</Link>
             </Button>
-            <Button onClick={handleSubmit} type="submit">
-              {scheduleLoading ? 'Enviando...' : 'Enviar'}
+            <Button
+              disabled={!methods.watch('time')?.length}
+              onClick={handleSubmit}
+              type="submit"
+            >
+              {isPending ? 'Enviando...' : 'Enviar'}
             </Button>
           </div>
         </form>

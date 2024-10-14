@@ -1,5 +1,4 @@
 import { Container, PageFormHeader } from 'common'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import styled from './styles.module.scss'
@@ -12,7 +11,6 @@ interface IPage {
 }
 
 export default async function NewSchedule({ searchParams }: IPage) {
-  const token = cookies().get('user-auth')?.value
   const { error, data: equipaments } = await getAllEquipaments({
     filter: {
       page: searchParams.page || 1,
@@ -28,10 +26,6 @@ export default async function NewSchedule({ searchParams }: IPage) {
         }
       })
     : []
-
-  if (!token) {
-    redirect('/login')
-  }
 
   if (error?.statusCode === 401) {
     return redirect('/login')

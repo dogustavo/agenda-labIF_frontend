@@ -3,6 +3,7 @@ import { getCookie } from 'server/cookieAction'
 export * from './auth'
 export * from './user'
 export * from './equipaments'
+export * from './schedules'
 
 import { handleResponse } from 'utils/apiErrorHandler'
 
