@@ -52,3 +52,54 @@ export async function authRegister({
     }
   }
 }
+
+export async function getUserProfile(): Promise<{
+  data?: IUserResponse
+  error?: FetchError
+}> {
+  try {
+    const res = await fetcher<IUserResponse>(`/profile`, {
+      method: 'GET'
+    })
+
+    return { data: res }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { error }
+    }
+
+    return {
+      error: new FetchError('Unexpected error', 500, new Response())
+    }
+  }
+}
+
+export async function editAuthUser({
+  params
+}: {
+  params: {
+    password?: string
+    name?: string
+    email?: string
+  }
+}): Promise<{
+  data?: IUserResponse
+  error?: FetchError
+}> {
+  try {
+    const res = await fetcher<IUserResponse>(`/edit-profile`, {
+      method: 'PUT',
+      body: JSON.stringify(params)
+    })
+
+    return { data: res }
+  } catch (error) {
+    if (error instanceof FetchError) {
+      return { error }
+    }
+
+    return {
+      error: new FetchError('Unexpected error', 500, new Response())
+    }
+  }
+}

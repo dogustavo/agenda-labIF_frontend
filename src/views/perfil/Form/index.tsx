@@ -3,32 +3,48 @@
 import { Button, Toast, Input } from 'common'
 import { FormProvider, useForm } from 'react-hook-form'
 import styled from './styles.module.scss'
-import { useState } from 'react'
-import { createUser } from 'services'
+import { useEffect, useState } from 'react'
+import { editAuthUser } from 'services'
 import { ToastStore, useToast } from 'store/notification'
 import { revalidateGeneral } from 'server/reavlidation'
 import Link from 'next/link'
 
 import { useMutation } from '@tanstack/react-query'
-import { IUserRegister } from 'types/user'
+import { IUserResponse } from 'types/user'
 
-interface IFormValues extends IUserRegister {
+import schema from './schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { setCookie } from 'server/cookieAction'
+import { useAuth } from 'store/auth'
+import { AuthStore } from 'types/auth'
+
+interface IFormValues {
   password_check: string
+  password: string
+  name: string
+  email: string
 }
 
-export default function EditProfileForm() {
-  const methods = useForm<IFormValues>()
+interface IPageProp {
+  profile?: IUserResponse
+}
+
+export default function EditProfileForm({ profile }: IPageProp) {
+  const methods = useForm<IFormValues>({
+    resolver: zodResolver(schema)
+  })
   const { setShowToast, type } = useToast(
     (state: ToastStore) => state
   )
+  const { signIn } = useAuth((state: AuthStore) => state)
 
   const [alertMessage, setAlertMessage] = useState('')
 
   const { mutate, isPending } = useMutation({
-    mutationFn: createUser,
+    mutationFn: editAuthUser,
     onSuccess: async (ctx) => {
       if (ctx.error) {
-        setAlertMessage('Não foi possível criar novo usuário')
+        setAlertMessage('Não foi possível editar seus dados')
         setShowToast({
           isOpen: true,
           type: 'error'
@@ -37,15 +53,43 @@ export default function EditProfileForm() {
         return
       }
 
-      setAlertMessage('Usuário criado com sucesso')
+      if (!ctx.data) {
+        setAlertMessage(
+          'Não foi possível atulizar sua senha de usuário'
+        )
+        setShowToast({
+          isOpen: true,
+          type: 'error'
+        })
+
+        return
+      }
+
+      setAlertMessage('Usuário salvo com sucesso')
       setShowToast({
         isOpen: true,
         type: 'success'
       })
-      methods.reset()
+
+      signIn({
+        ...ctx.data,
+        isBlocked: false,
+        isReseted: false,
+        isAuth: true
+      })
+
+      await setCookie('user-auth', ctx.data?.token)
+      await setCookie(
+        'user-role',
+        JSON.stringify({
+          role: ctx.data.role,
+          isReseted: false
+        })
+      )
+      methods.reset({ password: '', password_check: '' })
       await revalidateGeneral({
-        path: '/usuarios',
-        redirectTo: `/usuarios/novo`
+        path: '/',
+        redirectTo: `/perfil`
       })
     }
   })
@@ -54,10 +98,30 @@ export default function EditProfileForm() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password_check, ...rest } = values
 
+    const cleanedData = Object.fromEntries(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(rest).filter(([_, value]) => value.trim() !== '')
+    )
+
     await mutate({
-      data: { ...rest }
+      params: cleanedData
     })
   })
+
+  useEffect(() => {
+    if (profile?.name) {
+      methods.setValue('name', profile.name)
+    }
+    if (profile?.email) {
+      methods.setValue('email', profile.email)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if (!profile) {
+    return <div></div>
+  }
 
   return (
     <div className={styled['schedule-form-container']}>
