@@ -1,0 +1,9 @@
+.main-profile-page {
+  padding: rem(30) 0;
+}
+
+@media (min-width: $breakpoint-small) {
+  .main-profile-page {
+    padding: rem(40) 0;
+  }
+}

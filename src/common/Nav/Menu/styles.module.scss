@@ -122,6 +122,12 @@
     font-size: $text-extra-small;
     color: $color-primary;
   }
+
+  .user-info-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 }
 
 .overlay {

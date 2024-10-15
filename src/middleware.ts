@@ -31,5 +31,13 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/equipamentos/:path*', '/login', '/usuarios/:path*', '/']
+  matcher: [
+    '/equipamentos/:path*',
+    '/usuarios/:path*',
+    '/agendas/:path*',
+    '/perfil/:path*',
+    '/login',
+    '/usuarios/:path*',
+    '/'
+  ]
 }

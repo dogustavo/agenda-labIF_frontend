@@ -162,18 +162,28 @@ export default function Menu() {
             <span>{email}</span>
           </div>
 
-          <button
-            type="button"
-            onClick={handleLogout}
-            aria-label="Sair"
-          >
-            <Image
-              src="/svg/logout.svg"
-              width={24}
-              height={24}
-              alt="Icone de sair"
-            />
-          </button>
+          <div className={styled['user-info-buttons']}>
+            <Link href="/perfil">
+              <Image
+                src="/svg/settings.svg"
+                width={24}
+                height={24}
+                alt="Icone de engrenagem"
+              />
+            </Link>
+            <button
+              type="button"
+              onClick={handleLogout}
+              aria-label="Sair"
+            >
+              <Image
+                src="/svg/logout.svg"
+                width={24}
+                height={24}
+                alt="Icone de sair"
+              />
+            </button>
+          </div>
         </div>
       </div>
 
